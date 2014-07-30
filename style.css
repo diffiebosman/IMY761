@@ -1,0 +1,38 @@
+body{
+	background-color: #555;
+}
+
+.container{
+	max-width: 980px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#padContainer{
+	margin-top: 20px;
+}
+
+.padRow{
+	
+}
+
+.padRow div {
+	background-color: rgb(153, 217, 234);
+	width:30px;
+	height:30px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	
+	border-radius: 2px;
+	box-shadow: 0px 0px 2px 1px #222 inset;
+	float: left;
+}		
+
+.padRow div.highlighted{
+	background-color: #DDD;
+}
+
+.padRow div.active, .padRow div.active.highlighted{
+	background-color: rgb(112, 146, 190);
+}
