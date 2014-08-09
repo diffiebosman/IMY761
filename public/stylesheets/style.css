@@ -1,0 +1,146 @@
+body{
+	/**background-color: #555;**/
+}
+
+.container{
+	max-width: 980px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#padContainer{
+	position: absolute;
+	bottom: 100px;
+}
+
+#padContainer hr{
+	border: 3px solid #DDD;
+	border-radius: 10px;
+}
+
+i{
+	color: #B8D0E8;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
+}
+
+i:hover{
+	color: #637D98;
+
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;	
+}
+
+.arrowRow i{
+	width: 20px;
+	margin-right: 8px;
+	text-align: center;
+}
+
+.arrowRow i:first-child{
+	margin-left: 28px;
+}
+
+.padRow div i.fa{
+	display: block;
+	width: 28px;
+	height: 20px;
+	margin-bottom: 4px;
+	padding-top: 3px;
+	text-align: center;	
+}
+
+i.fa-chevron-circle-right{
+	float: left;
+}
+
+i.fa-chevron-circle-left{
+	float: right;
+}
+
+.padRow div {
+	background-color: #B8D0E8;
+	width:20px;
+	height:20px;
+	margin-right: 8px;
+	margin-bottom: 8px;
+	
+	border-radius: 3px;
+	box-shadow: 0px 0px 0px 1px #AAA inset;
+	float: left;
+	cursor: pointer;
+
+	/*
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;	
+	*/
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;		
+}
+
+.padRow div:first-child, .padRow div:last-child{
+	background-color: #FFF;
+	border: 0px;
+	box-shadow: none;
+}
+
+.padRow div:first-child:hover, .padRow div:last-child:hover{
+	box-shadow: none;
+}
+
+.padRow div:last-child {
+	margin-right: 0;
+}
+
+.padRow div:hover{
+	box-shadow: 0px 0px 2px 2px #444 inset;	
+
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;		
+}		
+
+.padRow div.highlighted{
+	background-color: #EEE;
+}
+
+.padRow div.active{
+	background-color: #637D98;
+}
+
+.padRow div.active.highlighted{
+	background-color: #ACFAAF;
+
+}
+
+div.controls{
+	width: 100%;
+	text-align: center;
+}
+
+div.controls i{
+	font-size: 36px;
+}
+
+.animated{
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;		
+}
