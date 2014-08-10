@@ -20,7 +20,7 @@ var Oscillator = function(context, audiobus, baseNote, scale){
 	}
 
 	// Creates an oscillator and plays a note through the audio bus
-	// @param freq = the step of the note in the scale (the how many-th note in the scale to play)
+	// @param step = the step of the note in the scale (the how many-th note in the scale to play)
 	this.play = function(step) {
 		var osc = context.createOscillator();
     	osc.frequency.value = getNote(getNoteFromScale(step));

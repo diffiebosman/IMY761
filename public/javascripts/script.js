@@ -32,12 +32,6 @@ $(function(){
 
 	grid.init();
 	grid.loopThroughGrid();
-
-	$('button').on('click', function(){
-		var sound = new Howl({
-		  urls: ['/samples/vibraphone/1.wav']
-		}).play()
-	});
 });
 
 
