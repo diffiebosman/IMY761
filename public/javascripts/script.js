@@ -31,6 +31,7 @@ $(function(){
 	bus.connect(context.destination);
 
 	grid.init();
+	clientSocket.initGrid(gridSize);
 	grid.loopThroughGrid();
 });
 

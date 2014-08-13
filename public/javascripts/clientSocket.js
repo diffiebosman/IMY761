@@ -1,5 +1,11 @@
 var ClientSocket = function(){
     var socket = io();
+
+    //Inform the server of the size of the grid to be used
+    // @param gridSize = size of Note Grid
+    this.initGrid = function(gridSize){
+        socket.emit('initGrid', gridSize);
+    }
     
     //Send toggled notes to the server for broadcast
     // @param x = x-coordinate on grid
@@ -25,18 +31,29 @@ var ClientSocket = function(){
     // @param gridSize = size of Note Grid
     this.listen = function(updateGrid, clearGrid, gridSize){
         socket.on('response', function(msg){
-        
+            //Toggle note specified by server
             if(msg.type === "toggleNote"){
                 updateGrid(msg.xval, msg.yval);
             }
             else if(msg.type === "toggleRow"){
+                //toggle row specified by server
                 for(var x = 0; x < gridSize; x++){
 				    updateGrid(x, msg.yval);                
 			    }
             }
             else if(msg.type === "clearAll"){
+                //clear grid specified by server
                 clearGrid();
             }
-          });
+            else if(msg.type === "initResponse" && msg.data != null){
+                //duplicate state of server grid in the browser
+                for(var x= 0; x < gridSize; x++){
+                    for(var y = 0; y < gridSize; y++){
+                        if(msg.data[x][y] === true)
+                            updateGrid(x, y);
+                    }
+                }                
+            }
+        });
     };
 };
