@@ -1,5 +1,6 @@
 var SamplePlayer = function(context, audiobus, baseNote, scale){
 
+	var volume = 100;
 	// Gets the appropriate amount of semitones from the root note
 	// @param step = the number of steps of the note above the root note in the scale
 	// @param scale = the scale used 
@@ -16,8 +17,15 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
 	// @param step = the step of the note in the scale (the how many-th note in the scale to play)
 	this.play = function(step) {
 		var sound = new Howl({
-		  urls: ['/samples/vibraphone/'+getNoteFromScale(step)+'.wav']
+		  urls: ['/samples/vibraphone/'+getNoteFromScale(step)+'.wav'],
+		  volume: this.volume
 		});
 		sound.play();
 	}
+
+    // sets the volume of the audiobus
+    // @param volume = value between 0 and 100 for volume	
+	this.setVolume = function(volume){
+		this.volume = volume;
+	}	
 };

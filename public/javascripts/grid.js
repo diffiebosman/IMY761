@@ -32,11 +32,47 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			$(this).append('<div><i class="fa fa-chevron-circle-left" data-y="'+y+'"></i></div>');			
 		});
 
-		$(container).append('<hr/><div class="controls"><i class="fa fa-undo animated"></i></div>');
+		var volumeDial = $('<input>')
+				.attr({
+					'type': 'text',
+					'value':'75',
+					'class': 'volumeDial',
+					'data-width': '36',
+					'data-height': '36',
+					'data-fgColor': '#B8D0E8',
+					'data-angleOffset': '-125',
+					'data-angleArc': '250'
+				});
+
+		// Create bottom border and grid controls
+		$(container).append('<hr/>');
+		$(container).append(
+			$('<div></div>')
+			.addClass('controls')
+			.append(
+				$('<div></div>')
+				.addClass('controlDial')
+				.append(volumeDial)
+			)
+			.append(
+				$('<i></i>')
+				.addClass('fa')
+				.addClass('fa-undo')
+				.addClass('animated')
+			)				
+		);
+		
+    	$(".volumeDial").knob({
+                	'change' : function (v) { instrument.setVolume(v); }
+        		});
+		
+    	/*$(".filterDial").knob({
+                	'change' : function (v) { console.log(v); }
+        		});		*/
 
 
 		/*************   EVENT HANDLERS  ***************************/
-		$(container).find("div div").each(function(){
+		$(container).find("div.padRow div").each(function(){
 			$(this)
 			.on('mousedown',function(){
 				updateGrid($(this).data('x'), $(this).data('y'));
@@ -75,7 +111,12 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	function updateGrid(x, y){
 		grid[x][y] = !grid[x][y];	
 		$(container).find('.padRow[data-y ="'+y+'"] div[data-x="'+x+'"]').toggleClass('active');
+	
+		updateColorBorder();	
+	}
 
+	// Changes the color of the bottom border of the grid depending on how many blocks are selected
+	function updateColorBorder(){
 		var rgb = getTweenedColor(getNumBlocks());
 		$(container).find('hr').css('border-color', 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')');		
 	}
@@ -100,6 +141,8 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			}
 		}
 		$(container).find('.padRow div').removeClass('active');
+
+		updateColorBorder();
 	}
 
 	// Returns the number of activated blocks
@@ -144,7 +187,8 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	// Infintely loop through grid and play activvated notes in columns
 	this.loopThroughGrid = function(){
 		var x = 0;
-		setInterval(function(){playGridColumns((x++) % gridSize)}, (60/BPM) * 1000);
+		var interval = (60/BPM) * 1000;
+		setInterval(function(){playGridColumns((x++) % gridSize)}, interval);
 	}
 
 	// Play activated notes in grid column

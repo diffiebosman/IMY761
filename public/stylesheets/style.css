@@ -137,6 +137,24 @@ div.controls{
 
 div.controls i{
 	font-size: 36px;
+	margin-left: 50px !important;
+	margin-right: 50px !important;	
+	margin-top: -10px;
+}
+
+
+div.controls * {
+
+}
+
+div.controls div.controlDial{
+	margin-left: 50px !important;
+	margin-right: 50px !important;
+	display: inline;
+}
+
+div.controls div.controlDial div:hover{
+	cursor: pointer;
 }
 
 .animated{

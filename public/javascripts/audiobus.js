@@ -22,9 +22,9 @@ var AudioBus = function(context){
 
     var overdrive = new tuna.Overdrive({
         outputGain: 1,         //0 to 1+
-        drive: 0.5,              //0 to 1
+        drive: 0.01,              //0 to 1
         curveAmount: 0.01,          //0 to 1
-        algorithmIndex: 0,       //0 to 5, selects one of our drive algorithms
+        algorithmIndex: 2,       //0 to 5, selects one of our drive algorithms
         bypass: 1
     });    
 
@@ -70,8 +70,13 @@ var AudioBus = function(context){
     //lowCutoffFilter.connect(gainNode);
     //gainNode.connect(output);
 
+    // sets the volume of the audiobus
+    // @param volume = value between 0 and 100 for volume
+    this.setVolume = function(volume){
+        output.gain.value = volume / 100;
+    }
 
 	this.connect = function(target){
        output.connect(target);
-    };    
+    };
 };
