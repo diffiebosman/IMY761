@@ -62,9 +62,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			)				
 		);
 		
-    	$(".volumeDial").knob({
-                	'change' : function (v) { instrument.setVolume(v); }
-        		});
+    	
 		
     	/*$(".filterDial").knob({
                 	'change' : function (v) { console.log(v); }
@@ -102,6 +100,10 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			clearGrid();
             clientSocket.clearAll();
 		});		
+
+		$(".volumeDial").knob({
+            'change' : function (v) { instrument.setVolume(v); }
+        });		
 		/*************************************************************/
 	};
 

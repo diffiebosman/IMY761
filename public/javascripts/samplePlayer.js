@@ -1,6 +1,7 @@
 var SamplePlayer = function(context, audiobus, baseNote, scale){
 
 	var volume = 100;
+	var drive = 50;
 	// Gets the appropriate amount of semitones from the root note
 	// @param step = the number of steps of the note above the root note in the scale
 	// @param scale = the scale used 
@@ -18,7 +19,8 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
 	this.play = function(step) {
 		var sound = new Howl({
 		  urls: ['/samples/vibraphone/'+getNoteFromScale(step)+'.wav'],
-		  volume: this.volume
+		  volume: this.volume,
+		  drive: this.drive
 		});
 		sound.play();
 	}
@@ -28,4 +30,9 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
 	this.setVolume = function(volume){
 		this.volume = volume;
 	}	
+
+    // You can't set the drive on a sample
+    this.setDrive = function(value){
+		return false;
+	}		
 };

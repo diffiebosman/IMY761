@@ -22,10 +22,10 @@ var AudioBus = function(context){
 
     var overdrive = new tuna.Overdrive({
         outputGain: 1,         //0 to 1+
-        drive: 0.01,              //0 to 1
+        drive: 0.1,              //0 to 1
         curveAmount: 0.01,          //0 to 1
         algorithmIndex: 2,       //0 to 5, selects one of our drive algorithms
-        bypass: 1
+        bypass: 0
     });    
 
 	var delay = new tuna.Delay({
@@ -38,11 +38,11 @@ var AudioBus = function(context){
     });				
 
     var filter = new tuna.Filter({
-        frequency: 15000,         //20 to 22050
-        Q: 100,                  //0.001 to 100
-        gain: 10,               //-40 to 40
-        filterType: 0,         //0 to 7, corresponds to the filter types in the native filter node: lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass in that order
-        bypass: 1
+        frequency: 10000,         //20 to 22050
+        Q: 0.01,                  //0.001 to 100
+        gain: -40,               //-40 to 40
+        filterType: 2,         //0 to 7, corresponds to the filter types in the native filter node: lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass in that order
+        bypass: 0
     });    
 
 
@@ -74,6 +74,14 @@ var AudioBus = function(context){
     // @param volume = value between 0 and 100 for volume
     this.setVolume = function(volume){
         output.gain.value = volume / 100;
+    }
+
+    // sets the drive of the overdrive for the audiobus
+    // @param value = value between 0 and 100 for frequency
+    this.setDrive = function(value){
+        //filter.frequency = value * 2;
+        overdrive.drive.value = value / 100 + 0.1;
+        console.log(overdrive.drive.value);
     }
 
 	this.connect = function(target){
