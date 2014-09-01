@@ -1,8 +1,8 @@
 var Grid = function(container, instrument, BPM, gridSize, clientSocket){
-	var grid = new Array();
-	var isDragging = false;	
-    
-    clientSocket.listen(updateGrid, clearGrid, gridSize);
+	var grid = [];
+	var isDragging = false;
+
+	clientSocket.listen(synchronise);
 
 	$('body').on('mousedown', function () {
 		isDragging = true;
@@ -29,20 +29,20 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			for(var i = 0; i < gridSize; i++){
 				$(this).append('<div data-x="'+i+'" data-y="'+y+'" class="animated"></div>');
 			}
-			$(this).append('<div><i class="fa fa-chevron-circle-left" data-y="'+y+'"></i></div>');			
+			$(this).append('<div><i class="fa fa-chevron-circle-left" data-y="'+y+'"></i></div>');
 		});
 
 		var volumeDial = $('<input>')
-				.attr({
-					'type': 'text',
-					'value':'75',
-					'class': 'volumeDial',
-					'data-width': '36',
-					'data-height': '36',
-					'data-fgColor': '#B8D0E8',
-					'data-angleOffset': '-125',
-					'data-angleArc': '250'
-				});
+		.attr({
+			'type': 'text',
+			'value':'75',
+			'class': 'volumeDial',
+			'data-width': '36',
+			'data-height': '36',
+			'data-fgColor': '#B8D0E8',
+			'data-angleOffset': '-125',
+			'data-angleArc': '250'
+		});
 
 		// Create bottom border and grid controls
 		$(container).append('<hr/>');
@@ -53,19 +53,19 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				$('<div></div>')
 				.addClass('controlDial')
 				.append(volumeDial)
-			)
+				)
 			.append(
 				$('<i></i>')
 				.addClass('fa fa-undo animated')
-			)				
-		);
-		
+				)
+			);
+
 		/*************   EVENT HANDLERS  ***************************/
 		$(container).find("div.padRow div").each(function(){
 			$(this)
 			.on('mousedown',function(){
 				updateGrid($(this).data('x'), $(this).data('y'));
-                clientSocket.toggleNote($(this).data('x'), $(this).data('y'));
+				clientSocket.toggleNote($(this).data('x'), $(this).data('y'));
 			})
 			.on('mouseup',function(){
 				isDragging = false;
@@ -73,7 +73,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			.on('mouseover', function(){
 				if(isDragging){
 					updateGrid($(this).data('x'), $(this).data('y'));
-                    clientSocket.toggleNote($(this).data('x'), $(this).data('y'));
+					clientSocket.toggleNote($(this).data('x'), $(this).data('y'));
 				}
 			});
 		});
@@ -81,20 +81,36 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 		$(container).find(".padRow i.fa").on('click', function(){
 			var y = $(this).data('y');
 			for(var x = 0; x < gridSize; x++){
-				updateGrid(x, y);                
+				updateGrid(x, y);
 			}
-            
-            clientSocket.toggleRow(y);
+
+			clientSocket.toggleRow(y);
 		});
 
 		$('div.controls i').on('click', function(){
 			clearGrid();
-            clientSocket.clearAll();
-		});		
+			clientSocket.clearAll();
+		});
+
+		//Wizardry to prevent function from spamming the server with requests, request is only sent after the knob is inactive for 0.5 seconds
+		//TODO: Apply this to the notes when dragging
+		var timer = null;
 
 		$(".volumeDial").knob({
-            'change' : function (v) { instrument.setVolume(v); }
-        });		
+			'change' : function(v){
+
+				instrument.setVolume(v);
+
+				if(timer){
+					window.clearTimeout(timer);
+				}
+
+				timer = window.setTimeout(function(){
+					timer = null;
+					clientSocket.changeVolume(v);
+				}, 500);
+			}
+		});
 		/*************************************************************/
 	};
 
@@ -102,16 +118,16 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	// @param x = x-coordinate on grid
 	// @param y = y-coordinate on grid
 	function updateGrid(x, y){
-		grid[x][y] = !grid[x][y];	
+		grid[x][y] = !grid[x][y];
 		$(container).find('.padRow[data-y ="'+y+'"] div[data-x="'+x+'"]').toggleClass('active');
-	
-		updateColorBorder();	
+
+		updateColorBorder();
 	}
 
 	// Changes the color of the bottom border of the grid depending on how many blocks are selected
 	function updateColorBorder(){
 		var rgb = getTweenedColor(getNumBlocks());
-		$(container).find('hr').css('border-color', 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')');		
+		$(container).find('hr').css('border-color', 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')');
 	}
 
 	// Print out the contents in the grid to an element
@@ -163,10 +179,10 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 		var percentageActivated = (numBlocks / Math.pow(gridSize, 2));
 
 		return {
-					r: Math.round(getTweenValue(startR, endR, percentageActivated)),
-					g: Math.round(getTweenValue(startG, endG, percentageActivated)),
-					b: Math.round(getTweenValue(startB, endB, percentageActivated))
-				};
+			r: Math.round(getTweenValue(startR, endR, percentageActivated)),
+			g: Math.round(getTweenValue(startG, endG, percentageActivated)),
+			b: Math.round(getTweenValue(startB, endB, percentageActivated))
+		};
 	}
 
 	// Returns a scaled value between start and end based on the percantage of blocks activated
@@ -175,14 +191,14 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	// @param percantageActivated = scaling value
 	function getTweenValue(start, end, percentageActivated){
 		return start + ( (end-start) * percentageActivated );
-	}	
+	}
 
 	// Infintely loop through grid and play activvated notes in columns
 	this.loopThroughGrid = function(){
 		var x = 0;
 		var interval = (60/BPM) * 1000;
 		setInterval(function(){playGridColumns((x++) % gridSize)}, interval);
-	}
+	};
 
 	// Play activated notes in grid column
 	// @param x = grid column to play notes in
@@ -190,10 +206,44 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 		var semitone;
 		grid[x].forEach(function(element, index, array){
 			if(element){
-				instrument.play(gridSize - index - 1);	
-			} 
+				instrument.play(gridSize - index - 1);
+			}
 			$('div.highlighted').removeClass('highlighted');
 			$(container).find('.padRow div[data-x ="'+x+'"]').addClass('highlighted');
 		});
 	}
-};
+
+	//Updates the grid according to responses from the server
+	function synchronise(msg){
+		console.log(msg);
+
+		if(msg.type === "toggleNote"){
+			updateGrid(msg.xval, msg.yval);
+		}
+		else if(msg.type === "toggleRow"){
+                //toggle row specified by server
+                for(var x = 0; x < gridSize; x++){
+					updateGrid(x, msg.yval);
+                }
+            }
+            else if(msg.type === "clearAll"){
+                //clear grid specified by server
+                clearGrid();
+            }
+            else if(msg.type === "changeVolume"){
+				//Changes the volume
+				instrument.setVolume(msg.volume);
+			}
+			else if(msg.type === "initResponse" && msg.data !== null){
+                //duplicate state of server grid in the browser
+                for(var x = 0; x < gridSize; x++){
+					for(var y = 0; y < gridSize; y++){
+						if(msg.data[x][y] === true)
+							updateGrid(x, y);
+					}
+                }
+                //Duplicates the current volume of the grid
+                instrument.setVolume(msg.volume);
+            }
+        }
+    };

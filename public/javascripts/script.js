@@ -26,7 +26,7 @@ $(function(){
 	var grid = new Grid($('#padContainer'), instrument, BPM, gridSize, clientSocket);
 
 	$('.container').css('max-width', 28 * gridSize + 100);
-	$('.container').css('height', 28 * gridSize + 100);	
+	$('.container').css('height', 28 * gridSize + 100);
 
 	bus.connect(context.destination);
 
@@ -34,6 +34,3 @@ $(function(){
 	clientSocket.initGrid(gridSize);
 	grid.loopThroughGrid();
 });
-
-
-
