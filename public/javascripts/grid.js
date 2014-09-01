@@ -56,19 +56,10 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			)
 			.append(
 				$('<i></i>')
-				.addClass('fa')
-				.addClass('fa-undo')
-				.addClass('animated')
+				.addClass('fa fa-undo animated')
 			)				
 		);
 		
-    	
-		
-    	/*$(".filterDial").knob({
-                	'change' : function (v) { console.log(v); }
-        		});		*/
-
-
 		/*************   EVENT HANDLERS  ***************************/
 		$(container).find("div.padRow div").each(function(){
 			$(this)
