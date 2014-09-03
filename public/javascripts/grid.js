@@ -92,23 +92,10 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			clientSocket.clearAll();
 		});
 
-		//Wizardry to prevent function from spamming the server with requests, request is only sent after the knob is inactive for 0.5 seconds
-		//TODO: Apply this to the notes when dragging
-		var timer = null;
-
 		$(".volumeDial").knob({
 			'change' : function(v){
-
 				instrument.setVolume(v);
-
-				if(timer){
-					window.clearTimeout(timer);
-				}
-
-				timer = window.setTimeout(function(){
-					timer = null;
-					clientSocket.changeVolume(v);
-				}, 500);
+				clientSocket.changeVolume(v);
 			}
 		});
 		/*************************************************************/
@@ -220,30 +207,42 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 		if(msg.type === "toggleNote"){
 			updateGrid(msg.xval, msg.yval);
 		}
-		else if(msg.type === "toggleRow"){
-                //toggle row specified by server
-                for(var x = 0; x < gridSize; x++){
-					updateGrid(x, msg.yval);
-                }
-            }
-            else if(msg.type === "clearAll"){
-                //clear grid specified by server
-                clearGrid();
-            }
-            else if(msg.type === "changeVolume"){
-				//Changes the volume
-				instrument.setVolume(msg.volume);
+		else if(msg.type === "toggleNoteSeries"){
+			var arr = msg.data;
+			var x, y;
+
+			for(var i = 0; i < arr.length; i+=2)
+			{
+				x = arr[i];
+				y = arr[i + 1];
+
+				updateGrid(x, y);
 			}
-			else if(msg.type === "initResponse" && msg.data !== null){
-                //duplicate state of server grid in the browser
-                for(var x = 0; x < gridSize; x++){
-					for(var y = 0; y < gridSize; y++){
-						if(msg.data[x][y] === true)
-							updateGrid(x, y);
-					}
-                }
-                //Duplicates the current volume of the grid
-                instrument.setVolume(msg.volume);
+		}
+		else if(msg.type === "toggleRow"){
+            //toggle row specified by server
+            for(var x = 0; x < gridSize; x++){
+            	updateGrid(x, msg.yval);
             }
         }
-    };
+        else if(msg.type === "clearAll"){
+            //clear grid specified by server
+            clearGrid();
+        }
+        else if(msg.type === "changeVolume"){
+			//Changes the volume
+			instrument.setVolume(msg.volume);
+		}
+		else if(msg.type === "initResponse" && msg.data !== null){
+            //duplicate state of server grid in the browser
+            for(var x = 0; x < gridSize; x++){
+            	for(var y = 0; y < gridSize; y++){
+            		if(msg.data[x][y] === true)
+            			updateGrid(x, y);
+            	}
+            }
+            //Duplicates the current volume of the grid
+            instrument.setVolume(msg.volume);
+        }
+    }
+};

@@ -1,3 +1,6 @@
+var timer = null;
+var noteBuffer = [];
+
 var ClientSocket = function(){
     var socket = io();
 
@@ -7,11 +10,32 @@ var ClientSocket = function(){
         socket.emit('initGrid', gridSize);
     };
 
-    //Send toggled notes to the server for broadcast
+    // Send toggled notes to the server for broadcast, buffers the notes and sends after 200ms if no new notes are toggled
+    // Buffering this may not be necessary, I'm not sure if it helps
     // @param x = x-coordinate on grid
 	// @param y = y-coordinate on grid
     this.toggleNote = function(x, y){
-        socket.emit('toggleNote', x, y);
+        // Uncomment this line and comment out everything else to stop using the buffer
+        //socket.emit('toggleNote', x, y);
+
+        noteBuffer.push(x);
+        noteBuffer.push(y);
+
+        if(timer){
+            window.clearTimeout(timer);
+        }
+
+        timer = window.setTimeout(function(){
+            timer = null;
+
+            if(noteBuffer.length > 2){
+                socket.emit('toggleNoteSeries', noteBuffer);
+            }
+            else{
+                socket.emit('toggleNote', x, y);
+            }
+            noteBuffer = [];
+        }, 200);
     };
 
     //Send toggled row of notes to the server for broadcast
@@ -20,8 +44,16 @@ var ClientSocket = function(){
         socket.emit('toggleRow', y);
     };
 
+    //Sends adjusted volume to server once every 500 ms to avoid spamming the server with requests
     this.changeVolume = function(v){
-        socket.emit("changeVolume", v);
+        if(timer){
+            window.clearTimeout(timer);
+        }
+
+        timer = window.setTimeout(function(){
+            timer = null;
+            socket.emit("changeVolume", v);
+        }, 500);
     };
 
     //Send signal to clear the grid

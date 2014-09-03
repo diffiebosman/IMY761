@@ -30,6 +30,26 @@ module.exports = function(io){
       socket.broadcast.emit('response', msg);
     });
 
+    socket.on('toggleNoteSeries', function(arr){
+      var x, y;
+
+      for(var i = 0; i < arr.length; i+=2)
+      {
+        x = arr[i];
+        y = arr[i + 1];
+
+        persistentGrid.toggleNote(x, y);
+        console.log("Toggle Note: X = " + x + ", Y = " + y);
+      }
+
+      var msg = {
+        type: "toggleNoteSeries",
+        data: arr
+      };
+
+      socket.broadcast.emit('response', msg);
+    });
+
     socket.on('toggleRow', function(y){
       persistentGrid.toggleRow(y);
       console.log("Toggle Row: Y = " + y);
