@@ -1,8 +1,7 @@
 var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	var grid = [];
 	var isDragging = false;
-
-	clientSocket.listen(synchronise);
+	var owner = null;
 
 	$('body').on('mousedown', function () {
 		isDragging = true;
@@ -12,7 +11,10 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	});
 
 	// Initialize the grid and add event handlers to divs
-	this.init = function(){
+	this.init = function(name){
+		owner = name;
+		clientSocket.listen(synchronise, owner);
+
 		for(var x= 0; x < gridSize; x++){
 			grid.push([]);
 			for(var y = 0; y < gridSize; y++){
@@ -24,7 +26,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			$(container).append('<div class="padRow" data-y="'+i+'"></div>');
 		}
 
-		$('.padRow').each(function(y){
+		$(container).find('.padRow').each(function(y){
 			$(this).append('<div><i class="fa fa-chevron-circle-right" data-y="'+y+'"></i></div>');
 			for(var i = 0; i < gridSize; i++){
 				$(this).append('<div data-x="'+i+'" data-y="'+y+'" class="animated"></div>');
@@ -65,7 +67,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			$(this)
 			.on('mousedown',function(){
 				updateGrid($(this).data('x'), $(this).data('y'));
-				clientSocket.toggleNote($(this).data('x'), $(this).data('y'));
+				clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
 			})
 			.on('mouseup',function(){
 				isDragging = false;
@@ -73,7 +75,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			.on('mouseover', function(){
 				if(isDragging){
 					updateGrid($(this).data('x'), $(this).data('y'));
-					clientSocket.toggleNote($(this).data('x'), $(this).data('y'));
+					clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
 				}
 			});
 		});
@@ -84,18 +86,18 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				updateGrid(x, y);
 			}
 
-			clientSocket.toggleRow(y);
+			clientSocket.toggleRow(y, owner);
 		});
 
-		$('div.controls i').on('click', function(){
+		$(container).find('div.controls i').on('click', function(){
 			clearGrid();
-			clientSocket.clearAll();
+			clientSocket.clearAll(owner);
 		});
 
-		$(".volumeDial").knob({
+		$(container).find(".volumeDial").knob({
 			'change' : function(v){
 				instrument.setVolume(v);
-				clientSocket.changeVolume(v);
+				clientSocket.changeVolume(v, owner);
 			}
 		});
 		/*************************************************************/
@@ -195,7 +197,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			if(element){
 				instrument.play(gridSize - index - 1);
 			}
-			$('div.highlighted').removeClass('highlighted');
+			$(container).find('div.highlighted').removeClass('highlighted');
 			$(container).find('.padRow div[data-x ="'+x+'"]').addClass('highlighted');
 		});
 	}
@@ -233,7 +235,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			//Changes the volume
 			instrument.setVolume(msg.volume);
 		}
-		else if(msg.type === "initResponse" && msg.data !== null){
+		else if(msg.type === "initResponse" && msg.data !== null && msg.owner === owner){
             //duplicate state of server grid in the browser
             for(var x = 0; x < gridSize; x++){
             	for(var y = 0; y < gridSize; y++){

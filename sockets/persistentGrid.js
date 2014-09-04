@@ -4,13 +4,14 @@ module.exports = function(){
 	var size = 0;
 	var volume = 75;
 	var initialised = false;
+	var owner = null;
 
 	//initialise the grid if it doesnt exist and return null
 	//return the grid if it does already exist
-	this.init = function(gridSize){
-		size = gridSize;
-
+	this.init = function(gridSize, name){
 		if(!initialised){
+			size = gridSize;
+			owner = name;
 			for(var x= 0; x < size; x++){
 				grid.push([]);
 				for(var y = 0; y < size; y++){
@@ -18,11 +19,15 @@ module.exports = function(){
 				}
 			}
 			initialised = true;
-			console.log("Initialising grid of size: " + gridSize);
+			console.log("Initialising grid '" + owner + "' of size: " + gridSize);
 			return null;
 		}
 
 		return grid;
+	};
+
+	this.getOwner = function(){
+		return owner;
 	};
 
 	this.toggleNote = function(x, y){

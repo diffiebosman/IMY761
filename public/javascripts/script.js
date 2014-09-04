@@ -23,14 +23,20 @@ $(function(){
 	//var instrument = new Oscillator(context, bus, A, minorScale);
 	var instrument = new SamplePlayer(context, bus, A, pentatonicScale);
     var clientSocket = new ClientSocket();
-	var grid = new Grid($('#padContainer'), instrument, BPM, gridSize, clientSocket);
+	var gridA = new Grid($('#padContainerA'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+	var gridB = new Grid($('#padContainerB'), instrument, BPM, gridSize, clientSocket); // So Volume/Overdrive is shared, each should have its own instrument eventually
 
-	$('.container').css('max-width', 28 * gridSize + 100);
-	$('.container').css('height', 28 * gridSize + 100);
+	$('.containerA').css('max-width', 28 * gridSize + 100);
+	$('.containerA').css('height', 28 * gridSize + 100);
+	$('.containerB').css('max-width', 28 * gridSize + 100);
+	$('.containerB').css('height', 28 * gridSize + 100);
 
 	bus.connect(context.destination);
 
-	grid.init();
-	clientSocket.initGrid(gridSize);
-	grid.loopThroughGrid();
+	gridA.init("A"); //Grid A is the users own grid
+	gridB.init("B"); //Grid B is the other/remote users grid, this will eventually not be editable by the local user
+	clientSocket.initGrid(gridSize, "A");
+	clientSocket.initGrid(gridSize, "B");
+	gridA.loopThroughGrid();
+	gridB.loopThroughGrid();
 });

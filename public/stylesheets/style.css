@@ -2,19 +2,38 @@ body{
 	/**background-color: #555;**/
 }
 
-.container{
+.containerA{
 	max-width: 980px;
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-#padContainer{
-	position: absolute;
-	bottom: 100px;
+.containerB{
+	max-width: 980px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-#padContainer hr{
+#padContainerA{
+	position: absolute;
+	bottom: 100px;
+	left: 100px;
+}
+
+#padContainerA hr{
+	border: 3px solid #DDD;
+	border-radius: 10px;
+}
+
+#padContainerB{
+	position: absolute;
+	bottom: 100px;
+	left: 700px;
+}
+
+#padContainerB hr{
 	border: 3px solid #DDD;
 	border-radius: 10px;
 }

@@ -6,15 +6,15 @@ var ClientSocket = function(){
 
     //Inform the server of the size of the grid to be used
     // @param gridSize = size of Note Grid
-    this.initGrid = function(gridSize){
-        socket.emit('initGrid', gridSize);
+    this.initGrid = function(gridSize, name){
+        socket.emit('initGrid', gridSize, name);
     };
 
     // Send toggled notes to the server for broadcast, buffers the notes and sends after 200ms if no new notes are toggled
     // Buffering this may not be necessary, I'm not sure if it helps
     // @param x = x-coordinate on grid
 	// @param y = y-coordinate on grid
-    this.toggleNote = function(x, y){
+    this.toggleNote = function(x, y, name){
         // Uncomment this line and comment out everything else to stop using the buffer
         //socket.emit('toggleNote', x, y);
 
@@ -29,10 +29,10 @@ var ClientSocket = function(){
             timer = null;
 
             if(noteBuffer.length > 2){
-                socket.emit('toggleNoteSeries', noteBuffer);
+                socket.emit('toggleNoteSeries', noteBuffer, name);
             }
             else{
-                socket.emit('toggleNote', x, y);
+                socket.emit('toggleNote', x, y, name);
             }
             noteBuffer = [];
         }, 200);
@@ -40,33 +40,35 @@ var ClientSocket = function(){
 
     //Send toggled row of notes to the server for broadcast
 	// @param y = y-coordinate on grid
-    this.toggleRow = function(y){
-        socket.emit('toggleRow', y);
+    this.toggleRow = function(y, name){
+        socket.emit('toggleRow', y, name);
     };
 
     //Sends adjusted volume to server once every 500 ms to avoid spamming the server with requests
-    this.changeVolume = function(v){
+    this.changeVolume = function(v, name){
         if(timer){
             window.clearTimeout(timer);
         }
 
         timer = window.setTimeout(function(){
             timer = null;
-            socket.emit("changeVolume", v);
+            socket.emit("changeVolume", v, name);
         }, 500);
     };
 
     //Send signal to clear the grid
-    this.clearAll = function(){
-        socket.emit('clearAll');
+    this.clearAll = function(name){
+        socket.emit('clearAll', name);
     };
 
     //Listener for server responses
     // @param synchronise = function in Grid to update the grid based on the type of server response
-    this.listen = function(synchronise){
+    this.listen = function(synchronise, name){
         socket.on('response', function(msg){
-            //Pass the server response to the grid
-            synchronise(msg);
+            //Delegates the server respnse to the specific grid to be processed
+            if(msg.owner === name){
+                synchronise(msg);
+            }
         });
     };
 };
