@@ -11,9 +11,8 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	});
 
 	// Initialize the grid and add event handlers to divs
-	this.init = function(name){
+	this.init = function(name, msg){
 		owner = name;
-		clientSocket.listen(synchronise, owner);
 
 		for(var x= 0; x < gridSize; x++){
 			grid.push([]);
@@ -62,6 +61,20 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				)
 			);
 
+		if(msg.type === "initResponse" && msg.data !== null){
+			//duplicate state of server grid in the browser
+			for(var x = 0; x < gridSize; x++){
+				for(var y = 0; y < gridSize; y++){
+					if(msg.data[x][y] === true)
+						updateGrid(x, y);
+				}
+			}
+			//Duplicates the current volume of the grid
+			instrument.setVolume(msg.volume);
+		}
+
+		clientSocket.listen(synchronise, owner);
+
 		/*************   EVENT HANDLERS  ***************************/
 		$(container).find("div.padRow div").each(function(){
 			$(this)
@@ -109,7 +122,6 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	function updateGrid(x, y){
 		grid[x][y] = !grid[x][y];
 		$(container).find('.padRow[data-y ="'+y+'"] div[data-x="'+x+'"]').toggleClass('active');
-
 		updateColorBorder();
 	}
 
@@ -222,29 +234,29 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			}
 		}
 		else if(msg.type === "toggleRow"){
-            //toggle row specified by server
-            for(var x = 0; x < gridSize; x++){
-            	updateGrid(x, msg.yval);
-            }
-        }
-        else if(msg.type === "clearAll"){
-            //clear grid specified by server
-            clearGrid();
-        }
-        else if(msg.type === "changeVolume"){
+			//toggle row specified by server
+			for(var x = 0; x < gridSize; x++){
+				updateGrid(x, msg.yval);
+			}
+		}
+		else if(msg.type === "clearAll"){
+			//clear grid specified by server
+			clearGrid();
+		}
+		else if(msg.type === "changeVolume"){
 			//Changes the volume
 			instrument.setVolume(msg.volume);
 		}
-		else if(msg.type === "initResponse" && msg.data !== null && msg.owner === owner){
-            //duplicate state of server grid in the browser
-            for(var x = 0; x < gridSize; x++){
-            	for(var y = 0; y < gridSize; y++){
-            		if(msg.data[x][y] === true)
-            			updateGrid(x, y);
-            	}
-            }
-            //Duplicates the current volume of the grid
-            instrument.setVolume(msg.volume);
-        }
-    }
+		/*else if(msg.type === "initResponse" && msg.data !== null){
+			//duplicate state of server grid in the browser
+			for(var x = 0; x < gridSize; x++){
+				for(var y = 0; y < gridSize; y++){
+					if(msg.data[x][y] === true)
+						updateGrid(x, y);
+				}
+			}
+			//Duplicates the current volume of the grid
+			instrument.setVolume(msg.volume);
+		}*/
+	}
 };

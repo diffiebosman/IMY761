@@ -2,38 +2,38 @@ body{
 	/**background-color: #555;**/
 }
 
-.containerA{
+.containerLocal{
 	max-width: 980px;
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.containerB{
+.containerRemote{
 	max-width: 980px;
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-#padContainerA{
+#padContainerLocal{
 	position: absolute;
 	bottom: 100px;
 	left: 100px;
 }
 
-#padContainerA hr{
+#padContainerLocal hr{
 	border: 3px solid #DDD;
 	border-radius: 10px;
 }
 
-#padContainerB{
+#padContainerRemote{
 	position: absolute;
 	bottom: 100px;
 	left: 700px;
 }
 
-#padContainerB hr{
+#padContainerRemote hr{
 	border: 3px solid #DDD;
 	border-radius: 10px;
 }

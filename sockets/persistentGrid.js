@@ -30,6 +30,19 @@ module.exports = function(){
 		return owner;
 	};
 
+	this.getGrid = function(){
+		return grid;
+	};
+
+	this.setVolume = function(v){
+		volume = v;
+		return volume;
+	};
+
+	this.getVolume = function(){
+		return volume;
+	};
+
 	this.toggleNote = function(x, y){
 		if(initialised){
 			grid[x][y] = !grid[x][y];
@@ -42,15 +55,6 @@ module.exports = function(){
 				grid[x][y] = !grid[x][y];
 			}
 		}
-	};
-
-	this.setVolume = function(v){
-		volume = v;
-		return volume;
-	};
-
-	this.getVolume = function(){
-		return volume;
 	};
 
 	this.clearAll = function(){

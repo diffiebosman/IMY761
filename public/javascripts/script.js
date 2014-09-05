@@ -1,6 +1,4 @@
-$(function(){
-
-	//*********************** VARIABLES ********************************//
+//*********************** VARIABLES ********************************//
 	//Scales
 	var pentatonicScale = [1, 4, 6, 8, 11];
 	var majorScale = [1, 3, 5, 6, 8, 10, 12];
@@ -22,21 +20,53 @@ $(function(){
 	var bus = new AudioBus(context);
 	//var instrument = new Oscillator(context, bus, A, minorScale);
 	var instrument = new SamplePlayer(context, bus, A, pentatonicScale);
-    var clientSocket = new ClientSocket();
-	var gridA = new Grid($('#padContainerA'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
-	var gridB = new Grid($('#padContainerB'), instrument, BPM, gridSize, clientSocket); // So Volume/Overdrive is shared, each should have its own instrument eventually
 
-	$('.containerA').css('max-width', 28 * gridSize + 100);
-	$('.containerA').css('height', 28 * gridSize + 100);
-	$('.containerB').css('max-width', 28 * gridSize + 100);
-	$('.containerB').css('height', 28 * gridSize + 100);
+	var clientSocket = new ClientSocket(); //Used for all communication with server other than signing in
+
+	start(local_data);
 
 	bus.connect(context.destination);
 
-	gridA.init("A"); //Grid A is the users own grid
-	gridB.init("B"); //Grid B is the other/remote users grid, this will eventually not be editable by the local user
-	clientSocket.initGrid(gridSize, "A");
-	clientSocket.initGrid(gridSize, "B");
-	gridA.loopThroughGrid();
-	gridB.loopThroughGrid();
-});
+function start(localClientName){
+	//Only used for setting up
+	var loginSocket = new ClientSocket();
+
+	//Send server the clients name for setting up local grid
+	loginSocket.signInResponse(setUpLocalGrid, localClientName);
+	loginSocket.signIn(gridSize, localClientName);
+
+	//Request the grids of other connected users (remote users)
+	loginSocket.getRemoteGrids(localClientName);
+	loginSocket.remoteGridResponse(setUpRemoteGrids, localClientName);
+}
+
+function setUpLocalGrid(msg, name){
+	var localGrid = new Grid($('#padContainerLocal'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+
+	$('.containerLocal').css('max-width', 28 * gridSize + 100);
+	$('.containerLocal').css('height', 28 * gridSize + 100);
+
+	localGrid.init(name, msg); //Grid A is the users own grid
+	localGrid.loopThroughGrid();
+}
+
+function setUpRemoteGrids(msg){
+	var grids = msg.data;
+
+	for(var i = 0; i < grids.length; i++){
+		var remoteGrid = new Grid($('#padContainerRemote'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+
+		$('.containerRemote').css('max-width', 28 * gridSize + 100);
+		$('.containerRemote').css('height', 28 * gridSize + 100);
+
+		var newMsg = {
+			type: "initResponse",
+			owner: grids[i].name,
+			data: grids[i].grid,
+			volume: grids[i].vol
+		};
+
+		remoteGrid.init(grids[i].name, newMsg); //Grid A is the users own grid
+		remoteGrid.loopThroughGrid();
+	}
+}

@@ -6,8 +6,30 @@ var ClientSocket = function(){
 
     //Inform the server of the size of the grid to be used
     // @param gridSize = size of Note Grid
-    this.initGrid = function(gridSize, name){
+    this.signIn = function(gridSize, name){
         socket.emit('initGrid', gridSize, name);
+    };
+
+    //Returns the servers response to the log in request
+    // @param name = the clientName of the client which is signing in
+    this.signInResponse = function(setupFunc, name){
+        socket.on('response', function(msg){
+            if(msg.type == "initResponse" && msg.owner === name){
+                setupFunc(msg, name);
+            }
+        });
+    };
+
+    this.getRemoteGrids = function(name){
+        socket.emit('getRemoteGrids', name);
+    };
+
+    this.remoteGridResponse = function(setupFunc, name){
+        socket.on('response', function(msg){
+            if(msg.type == "getRemoteGrids" && msg.owner === name){
+                setupFunc(msg);
+            }
+        });
     };
 
     // Send toggled notes to the server for broadcast, buffers the notes and sends after 200ms if no new notes are toggled
@@ -66,7 +88,7 @@ var ClientSocket = function(){
     this.listen = function(synchronise, name){
         socket.on('response', function(msg){
             //Delegates the server respnse to the specific grid to be processed
-            if(msg.owner === name){
+            if(msg.type !== "getRemoteGrids" && msg.owner === name){
                 synchronise(msg);
             }
         });

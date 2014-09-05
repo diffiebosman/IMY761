@@ -1,6 +1,7 @@
 var PersistentGrid = require('../sockets/persistentGrid');
 var persistentGrid = [];
 
+//Search the grids for the index of the clients grid
 function getIndex(name){
   var index;
 
@@ -16,29 +17,58 @@ function getIndex(name){
 module.exports = function(io){
 
   io.on('connection', function(socket){
-    socket.on('initGrid', function(gridSize, name){
-      var index = getIndex(name);
 
+    //Check if the connecting client has a grid associated with it
+    socket.on('initGrid', function(gridSize, clientName){
+      var index = getIndex(clientName);
+
+      //If the client doesn't own a grid, create one for the client. Else retrieve the state of the client's grid
       if(index === undefined){
         index = persistentGrid.push(new PersistentGrid()) - 1;
-        console.log(name + " not found! Creating new Grid for " + name + " at index " + index);
+        console.log(clientName + " not found! Creating new Grid for " + clientName + " at index " + index);
       }
       else{
-        console.log(name + " already exists! Fetching grid for " + name + " at index " + index);
+        console.log(clientName + " already registered. Fetching grid for " + clientName + " at index " + index);
       }
 
-      var result = persistentGrid[index].init(gridSize, name);
+      var result = persistentGrid[index].init(gridSize, clientName);
       var vol = persistentGrid[index].getVolume();
 
       var msg = {
         type: "initResponse",
-        owner: name,
+        owner: clientName,
         data: result,
         volume: vol
       };
 
       socket.emit('response', msg);
 
+    });
+
+    //Fetches all the remote grids for the requesting client
+    socket.on('getRemoteGrids', function(name){
+      var index = getIndex(name);
+      var result = [];
+
+      for(var i = 0; i < persistentGrid.length; i++){
+        if(persistentGrid[i].getOwner() !== name){
+          var remote = {
+            name: persistentGrid[i].getOwner(),
+            grid: persistentGrid[i].getGrid(),
+            vol: persistentGrid[i].getVolume()
+          };
+
+          result.push(remote);
+        }
+      }
+
+      var msg = {
+        type: "getRemoteGrids",
+        owner: name,
+        data: result
+      };
+
+      socket.emit('response', msg);
     });
 
     socket.on('toggleNote', function(x, y, name){

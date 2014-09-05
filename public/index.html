@@ -2,34 +2,15 @@
 
 <html>
 	<head>
-		<script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
-		<script type="text/javascript" src="/javascripts/jquery.knob.js"></script>		
-        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-        <script type="text/javascript" src="/javascripts/tuna.js"></script>
-		<script type="text/javascript" src="/javascripts/audiobus.js"></script>
-		<script type="text/javascript" src="/javascripts/howler.js"></script>
-		<script type="text/javascript" src="/javascripts/oscillator.js"></script>
-		<script type="text/javascript" src="/javascripts/samplePlayer.js"></script>
-		<script type="text/javascript" src="/javascripts/grid.js"></script>
-        <script type="text/javascript" src="/javascripts/clientSocket.js"></script>
-		<script type='text/javascript' src="/javascripts/script.js"></script>
 
-		<link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" href="/font-awesome-4.1.0/css/font-awesome.min.css" />
 	</head>
 
 	<body>
-		<div class="containerA">
-			<div id="padContainerA">
-			</div>
-
-			<div id="printGridA"></div>
-		</div>
-		<div class="containerB">			
-			<div id="padContainerB">
-			</div>
-
-			<div id="printGridB"></div>
-		</div>
+		<h1>Welcome!</h1>
+		<h2>Enter a username</h2>
+		<form method="POST" action="/test">
+			<input type="text" name="username" id="username" />
+			<input type="submit" name="login" title="login" value="Login" id="login"/> 
+		</form>
 	</body>
 </html>
