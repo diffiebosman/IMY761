@@ -22,6 +22,7 @@
 	var bus = new AudioBus(context);
 	//var instrument = new Oscillator(context, bus, A, minorScale);
 	var instrument = new SamplePlayer(context, bus, A, pentatonicScale);
+	instrument.init();
 
 	var clientSocket = new ClientSocket(); //Used for all communication with server other than signing in
 
@@ -45,7 +46,7 @@ function start(localClientName){
 function setUpLocalGrid(msg, name){
 	var localGrid = new Grid($('#padContainerLocal'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
 
-	$('.containerLocal').css('max-width', (localGridBlock.size + localGridBlock.margin) * gridSize + ((localGridBlock.size + localGridBlock.margin) * 2) - localGridBlock.margin);
+	$('.containerLocal').css('max-width', (localGridBlock.size + localGridBlock.margin) * gridSize + ((localGridBlock.size* 2) + localGridBlock.margin));
 	$('.containerLocal').css('height', (localGridBlock.size + localGridBlock.margin) * gridSize + 100);
 
 	localGrid.init(name, msg); //Grid A is the users own grid

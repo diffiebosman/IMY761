@@ -1,5 +1,7 @@
 extends layout
 
-block content
-  h1= title
-  p Welcome to #{title}
+h1= Welcome
+h2= Enter a username
+form(method='POST', action='/test')
+	input(type='text', name='username', id='username')
+	input(type='submit', name='login', title='login', value='Login', id='login')

@@ -19,8 +19,7 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
 	this.play = function(step) {
 		var sound = new Howl({
 		  urls: ['/samples/vibraphone/'+getNoteFromScale(step)+'.wav'],
-		  volume: this.volume,
-		  drive: this.drive
+		  volume: this.volume
 		});
 		sound.play();
 	}
@@ -34,5 +33,15 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
     // You can't set the drive on a sample
     this.setDrive = function(value){
 		return false;
-	}		
+	}
+
+	// preload samples to avoid lagging when using the samples for the first time
+	this.init = function(){
+		for(var i = 0; i < 37; i++){
+			var sound = new Howl({
+			  urls: ['/samples/vibraphone/'+i+'.wav'],
+			  volume: 0
+			}).play();
+		}
+	}
 };

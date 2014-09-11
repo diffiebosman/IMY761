@@ -120,13 +120,13 @@ i.fa-chevron-circle-left{
 	margin-bottom: 4px;
 }
 
-.padRow div:first-child, .padRow div:last-child{
+.containerLocal .padRow div:first-child, .containerLocal .padRow div:last-child{
 	background-color: #FFF;
 	border: 0px;
 	box-shadow: none;
 }
 
-.padRow div:first-child:hover, .padRow div:last-child:hover{
+.containerLocal .padRow div:first-child:hover, .containerLocal .padRow div:last-child:hover{
 	box-shadow: none;
 }
 

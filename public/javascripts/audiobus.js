@@ -25,7 +25,7 @@ var AudioBus = function(context){
         drive: 0.1,              //0 to 1
         curveAmount: 0.01,          //0 to 1
         algorithmIndex: 2,       //0 to 5, selects one of our drive algorithms
-        bypass: 0
+        bypass: 1
     });    
 
 	var delay = new tuna.Delay({

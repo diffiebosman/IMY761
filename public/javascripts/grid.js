@@ -34,6 +34,8 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			if(isLocal) $(this).append('<div><i class="fa fa-chevron-circle-left" data-y="'+y+'"></i></div>');
 		});
 
+		clientSocket.listen(synchronise, owner);
+
 		// You can only control your own grid
 		if(isLocal)
 		{
@@ -77,7 +79,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				instrument.setVolume(msg.volume);
 			}
 
-			clientSocket.listen(synchronise, owner);
+			
 
 			/*************   EVENT HANDLERS  ***************************/
 			$(container).find("div.padRow div").each(function(){

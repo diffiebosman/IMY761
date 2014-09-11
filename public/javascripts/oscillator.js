@@ -38,6 +38,11 @@ var Oscillator = function(context, audiobus, baseNote, scale){
 		setTimeout(function(){osc.noteOff(0); osc = null;}, 250);
 	}
 
+	// nothing to initialize when using an oscillator
+	this.init = function(){
+		return false;
+	}
+
     // sets the volume of the audiobus
     // @param volume = value between 0 and 100 for volume	
 	this.setVolume = function(volume){
