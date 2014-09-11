@@ -14,6 +14,8 @@
 
 	//Grid Variables
 	var gridSize = 16;
+	var localGridBlock = {size: 20, margin: 8};
+	var remoteGridBlock = {size: 8, margin: 4};
 
 	//Global factories
 	var context = new (window.AudioContext || window.webkitAudioContext)();
@@ -43,8 +45,8 @@ function start(localClientName){
 function setUpLocalGrid(msg, name){
 	var localGrid = new Grid($('#padContainerLocal'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
 
-	$('.containerLocal').css('max-width', 28 * gridSize + 100);
-	$('.containerLocal').css('height', 28 * gridSize + 100);
+	$('.containerLocal').css('max-width', (localGridBlock.size + localGridBlock.margin) * gridSize + ((localGridBlock.size + localGridBlock.margin) * 2) - localGridBlock.margin);
+	$('.containerLocal').css('height', (localGridBlock.size + localGridBlock.margin) * gridSize + 100);
 
 	localGrid.init(name, msg); //Grid A is the users own grid
 	localGrid.loopThroughGrid();
@@ -52,12 +54,14 @@ function setUpLocalGrid(msg, name){
 
 function setUpRemoteGrids(msg){
 	var grids = msg.data;
+	//console.log(grids.length);
 
 	for(var i = 0; i < grids.length; i++){
-		var remoteGrid = new Grid($('#padContainerRemote'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+		//console.log(i);
+		var remoteGrid = new Grid($('#padContainerRemote' + i), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
 
-		$('.containerRemote').css('max-width', 28 * gridSize + 100);
-		$('.containerRemote').css('height', 28 * gridSize + 100);
+		$('.containerRemote' + i).css('max-width', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize);
+		$('.containerRemote' + i).css('height', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize + 100);
 
 		var newMsg = {
 			type: "initResponse",

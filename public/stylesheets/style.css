@@ -2,24 +2,33 @@ body{
 	/**background-color: #555;**/
 }
 
+.centered{
+	margin-left: auto;
+	margin-right: auto;	
+}
+
 .containerLocal{
+	max-width: 200px;
+	width: 100%;
+}
+
+.containerRemote0, .containerRemote1, .containerRemote2{
 	max-width: 980px;
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.containerRemote{
-	max-width: 980px;
-	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
+.containerRemote1{
+	float: left;
+}
+
+.containerRemote2{
+	float: right;
 }
 
 #padContainerLocal{
-	position: absolute;
-	bottom: 100px;
-	left: 100px;
+	
 }
 
 #padContainerLocal hr{
@@ -93,17 +102,8 @@ i.fa-chevron-circle-left{
 	margin-bottom: 8px;
 	
 	border-radius: 3px;
-	/*box-shadow: 0px 0px 0px 1px #AAA inset;*/
 	box-shadow: 0px 3px 0px #CBE5FF;
 	float: left;
-	cursor: pointer;
-
-	/*
-	-webkit-transition: none;
-	-moz-transition: none;
-	-o-transition: none;
-	transition: none;	
-	*/
 
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -111,6 +111,13 @@ i.fa-chevron-circle-left{
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;		
+}
+
+.containerRemote .padRow div {
+	width:8px;
+	height:8px;
+	margin-right: 4px;
+	margin-bottom: 4px;
 }
 
 .padRow div:first-child, .padRow div:last-child{
@@ -127,8 +134,9 @@ i.fa-chevron-circle-left{
 	margin-right: 0;
 }
 
-.padRow div:hover{
+.containerLocal .padRow div:hover{
 	box-shadow: 0px 0px 2px 2px #444 inset;	
+	cursor: pointer;
 
 	-webkit-transition: none;
 	-moz-transition: none;

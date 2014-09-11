@@ -13,6 +13,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	// Initialize the grid and add event handlers to divs
 	this.init = function(name, msg){
 		owner = name;
+		var isLocal = name == local_data;
 
 		for(var x= 0; x < gridSize; x++){
 			grid.push([]);
@@ -26,94 +27,101 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 		}
 
 		$(container).find('.padRow').each(function(y){
-			$(this).append('<div><i class="fa fa-chevron-circle-right" data-y="'+y+'"></i></div>');
+			if(isLocal) $(this).append('<div><i class="fa fa-chevron-circle-right" data-y="'+y+'"></i></div>');
 			for(var i = 0; i < gridSize; i++){
-				$(this).append('<div data-x="'+i+'" data-y="'+y+'" class="animated"></div>');
+				$(this).append('<div data-x="'+i+'" data-y="'+y+'" class="animated block"></div>');
 			}
-			$(this).append('<div><i class="fa fa-chevron-circle-left" data-y="'+y+'"></i></div>');
+			if(isLocal) $(this).append('<div><i class="fa fa-chevron-circle-left" data-y="'+y+'"></i></div>');
 		});
 
-		var volumeDial = $('<input>')
-		.attr({
-			'type': 'text',
-			'value':'75',
-			'class': 'volumeDial',
-			'data-width': '36',
-			'data-height': '36',
-			'data-fgColor': '#B8D0E8',
-			'data-angleOffset': '-125',
-			'data-angleArc': '250'
-		});
-
-		// Create bottom border and grid controls
-		$(container).append('<hr/>');
-		$(container).append(
-			$('<div></div>')
-			.addClass('controls')
-			.append(
-				$('<div></div>')
-				.addClass('controlDial')
-				.append(volumeDial)
-				)
-			.append(
-				$('<i></i>')
-				.addClass('fa fa-undo animated')
-				)
-			);
-
-		if(msg.type === "initResponse" && msg.data !== null){
-			//duplicate state of server grid in the browser
-			for(var x = 0; x < gridSize; x++){
-				for(var y = 0; y < gridSize; y++){
-					if(msg.data[x][y] === true)
-						updateGrid(x, y);
-				}
-			}
-			//Duplicates the current volume of the grid
-			instrument.setVolume(msg.volume);
-		}
-
-		clientSocket.listen(synchronise, owner);
-
-		/*************   EVENT HANDLERS  ***************************/
-		$(container).find("div.padRow div").each(function(){
-			$(this)
-			.on('mousedown',function(){
-				updateGrid($(this).data('x'), $(this).data('y'));
-				clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
-			})
-			.on('mouseup',function(){
-				isDragging = false;
-			})
-			.on('mouseover', function(){
-				if(isDragging){
-					updateGrid($(this).data('x'), $(this).data('y'));
-					clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
-				}
+		// You can only control your own grid
+		if(isLocal)
+		{
+			var volumeDial = $('<input>')
+			.attr({
+				'type': 'text',
+				'value':'75',
+				'class': 'volumeDial',
+				'data-width': '36',
+				'data-height': '36',
+				'data-fgColor': '#B8D0E8',
+				'data-angleOffset': '-125',
+				'data-angleArc': '250'
 			});
-		});
 
-		$(container).find(".padRow i.fa").on('click', function(){
-			var y = $(this).data('y');
-			for(var x = 0; x < gridSize; x++){
-				updateGrid(x, y);
+			// Create bottom border and grid controls
+			$(container).append('<hr/>');
+			$(container).append(
+				$('<div></div>')
+				.addClass('controls')
+				.append(
+					$('<div></div>')
+					.addClass('controlDial')
+					.append(volumeDial)
+					)
+				.append(
+					$('<i></i>')
+					.addClass('fa fa-undo animated')
+					)
+				);
+
+			if(msg.type === "initResponse" && msg.data !== null){
+				//duplicate state of server grid in the browser
+				for(var x = 0; x < gridSize; x++){
+					for(var y = 0; y < gridSize; y++){
+						if(msg.data[x][y] === true)
+							updateGrid(x, y);
+					}
+				}
+				//Duplicates the current volume of the grid
+				instrument.setVolume(msg.volume);
 			}
 
-			clientSocket.toggleRow(y, owner);
-		});
+			clientSocket.listen(synchronise, owner);
 
-		$(container).find('div.controls i').on('click', function(){
-			clearGrid();
-			clientSocket.clearAll(owner);
-		});
+			/*************   EVENT HANDLERS  ***************************/
+			$(container).find("div.padRow div").each(function(){
+				$(this)
+					.on('mousedown',function(){
+						updateGrid($(this).data('x'), $(this).data('y'));
+						clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
+					})
+					.on('mouseup',function(){
+						isDragging = false;
+					})
+					.on('mouseover', function(){
+						if(isDragging){
+							updateGrid($(this).data('x'), $(this).data('y'));
+							clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
+						}
+					});
+				});
 
-		$(container).find(".volumeDial").knob({
-			'change' : function(v){
-				instrument.setVolume(v);
-				clientSocket.changeVolume(v, owner);
-			}
-		});
-		/*************************************************************/
+				$(container).find(".padRow i.fa").on('click', function(){
+					var y = $(this).data('y');
+					for(var x = 0; x < gridSize; x++){
+						updateGrid(x, y);
+					}
+
+					clientSocket.toggleRow(y, owner);
+				});
+
+				$(container).find('div.controls i').on('click', function(){
+					clearGrid();
+					clientSocket.clearAll(owner);
+				});
+
+				$(container).find(".volumeDial").knob({
+					'change' : function(v){
+						instrument.setVolume(v);
+						clientSocket.changeVolume(v, owner);
+					}
+				});
+			/*************************************************************/			
+		}
+		
+
+		
 	};
 
 	// Toggle buttons on grid (on/off)
