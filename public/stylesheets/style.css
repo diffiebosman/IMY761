@@ -109,6 +109,10 @@ input[type='submit']:active{
 	width: 100%;
 }
 
+.containerLocal h1{
+	text-align: center;
+}
+
 .containerRemote0, .containerRemote1, .containerRemote2{
 	max-width: 980px;
 	width: 100%;

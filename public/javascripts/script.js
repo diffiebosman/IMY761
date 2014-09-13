@@ -23,6 +23,7 @@
 	//var instrument = new Oscillator(context, bus, A, minorScale);
 	var instrument = new SamplePlayer(context, bus, A, pentatonicScale);
 	instrument.init();
+	instrument.setVolume(50);
 
 	var clientSocket = new ClientSocket(); //Used for all communication with server other than signing in
 

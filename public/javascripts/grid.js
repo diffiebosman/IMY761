@@ -42,7 +42,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			var volumeDial = $('<input>')
 			.attr({
 				'type': 'text',
-				'value':'75',
+				'value':'50',
 				'class': 'volumeDial',
 				'data-width': '36',
 				'data-height': '36',
@@ -67,7 +67,49 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 					)
 				);
 
-			if(msg.type === "initResponse" && msg.data !== null){
+			/*************   EVENT HANDLERS  ***************************/
+			$(container).find("div.padRow div").each(function(){
+				$(this)
+				.on('mousedown',function(){
+					updateGrid($(this).data('x'), $(this).data('y'));
+					clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
+				})
+				.on('mouseup',function(){
+					isDragging = false;
+				})
+				.on('mouseover', function(){
+					if(isDragging){
+						updateGrid($(this).data('x'), $(this).data('y'));
+						clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
+					}
+				});
+			});
+
+			$(container).find(".padRow i.fa").on('click', function(){
+				var y = $(this).data('y');
+				for(var x = 0; x < gridSize; x++){
+					updateGrid(x, y);
+				}
+
+				clientSocket.toggleRow(y, owner);
+			});
+
+			$(container).find('div.controls i').on('click', function(){
+				clearGrid();
+				clientSocket.clearAll(owner);
+			});
+
+			$(container).find(".volumeDial").knob({
+				'change' : function(v){
+					instrument.setVolume(v);
+					clientSocket.changeVolume(v, owner);
+				}
+			});
+		}
+
+		// This needs to run for every grid as part of its set-up, this duplicates the state of the grid in the server
+		if(msg.type === "initResponse" && msg.data !== null){
+				console.log(msg);
 				//duplicate state of server grid in the browser
 				for(var x = 0; x < gridSize; x++){
 					for(var y = 0; y < gridSize; y++){
@@ -79,52 +121,8 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				instrument.setVolume(msg.volume);
 			}
 
-			
-
-			/*************   EVENT HANDLERS  ***************************/
-			$(container).find("div.padRow div").each(function(){
-				$(this)
-					.on('mousedown',function(){
-						updateGrid($(this).data('x'), $(this).data('y'));
-						clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
-					})
-					.on('mouseup',function(){
-						isDragging = false;
-					})
-					.on('mouseover', function(){
-						if(isDragging){
-							updateGrid($(this).data('x'), $(this).data('y'));
-							clientSocket.toggleNote($(this).data('x'), $(this).data('y'), owner);
-						}
-					});
-				});
-
-				$(container).find(".padRow i.fa").on('click', function(){
-					var y = $(this).data('y');
-					for(var x = 0; x < gridSize; x++){
-						updateGrid(x, y);
-					}
-
-					clientSocket.toggleRow(y, owner);
-				});
-
-				$(container).find('div.controls i').on('click', function(){
-					clearGrid();
-					clientSocket.clearAll(owner);
-				});
-
-				$(container).find(".volumeDial").knob({
-					'change' : function(v){
-						instrument.setVolume(v);
-						clientSocket.changeVolume(v, owner);
-					}
-				});
-			/*************************************************************/			
-		}
-		
-
-		
-	};
+			/*************************************************************/
+		};
 
 	// Toggle buttons on grid (on/off)
 	// @param x = x-coordinate on grid
@@ -208,7 +206,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 	this.loopThroughGrid = function(){
 		var x = 0;
 		var interval = (60/BPM) * 1000;
-		setInterval(function(){playGridColumns((x++) % gridSize)}, interval);
+		setInterval(function(){playGridColumns((x++) % gridSize);}, interval);
 	};
 
 	// Play activated notes in grid column
@@ -257,16 +255,5 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			//Changes the volume
 			instrument.setVolume(msg.volume);
 		}
-		/*else if(msg.type === "initResponse" && msg.data !== null){
-			//duplicate state of server grid in the browser
-			for(var x = 0; x < gridSize; x++){
-				for(var y = 0; y < gridSize; y++){
-					if(msg.data[x][y] === true)
-						updateGrid(x, y);
-				}
-			}
-			//Duplicates the current volume of the grid
-			instrument.setVolume(msg.volume);
-		}*/
 	}
 };

@@ -2,7 +2,7 @@ module.exports = function(){
 
 	var grid = [];
 	var size = 0;
-	var volume = 75;
+	var volume = 50;
 	var initialised = false;
 	var owner = null;
 

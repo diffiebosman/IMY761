@@ -37,7 +37,7 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
 
 	// preload samples to avoid lagging when using the samples for the first time
 	this.init = function(){
-		for(var i = 0; i < 37; i++){
+		for(var i = 1; i < 37; i++){
 			var sound = new Howl({
 			  urls: ['/samples/vibraphone/'+i+'.wav'],
 			  volume: 0
