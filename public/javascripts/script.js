@@ -21,7 +21,7 @@
 	var context = new (window.AudioContext || window.webkitAudioContext)();
 	var bus = new AudioBus(context);
 	//var instrument = new Oscillator(context, bus, A, minorScale);
-	var instrument = new SamplePlayer(context, bus, A, pentatonicScale);
+	var instrument = new SamplePlayer(context, bus, A, pentatonicScale, 'rhodes');
 	instrument.init();
 	instrument.setVolume(50);
 

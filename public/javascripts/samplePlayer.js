@@ -1,4 +1,4 @@
-var SamplePlayer = function(context, audiobus, baseNote, scale){
+var SamplePlayer = function(context, audiobus, baseNote, scale, sampleName){
 
 	var volume = 100;
 	var drive = 50;
@@ -18,7 +18,7 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
 	// @param step = the step of the note in the scale (the how many-th note in the scale to play)
 	this.play = function(step) {
 		var sound = new Howl({
-		  urls: ['/samples/vibraphone/'+getNoteFromScale(step)+'.wav'],
+		  urls: ['/samples/'+sampleName+'/'+getNoteFromScale(step)+'.wav'],
 		  volume: this.volume
 		});
 		sound.play();
@@ -39,7 +39,7 @@ var SamplePlayer = function(context, audiobus, baseNote, scale){
 	this.init = function(){
 		for(var i = 1; i < 37; i++){
 			var sound = new Howl({
-			  urls: ['/samples/vibraphone/'+i+'.wav'],
+			  urls: ['/samples/'+sampleName+'/'+i+'.wav'],
 			  volume: 0
 			}).play();
 		}
