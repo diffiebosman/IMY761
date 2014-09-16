@@ -204,11 +204,17 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 		return start + ( (end-start) * percentageActivated );
 	}
 
+	var playhead;
+
 	// Infintely loop through grid and play activvated notes in columns
-	this.loopThroughGrid = function(){
-		var x = 0;
+	this.loopThroughGrid = function(start){
+		playhead = start;
 		var interval = (60/BPM) * 1000;
-		setInterval(function(){playGridColumns((x++) % gridSize);}, interval);
+		setInterval(function(){playGridColumns((playhead++) % gridSize);}, interval);
+	};
+
+	this.getPlayHead = function(){
+		return playhead;
 	};
 
 	// Play activated notes in grid column

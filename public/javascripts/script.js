@@ -26,7 +26,8 @@
 	instrument.setVolume(50);
 
 	var clientSocket = new ClientSocket(); //Used for all communication with server other than signing in
-	var remoteGridUsed = [false, false, false]; //Tracks which grid have already been initialized, prevents duplication when a new user joins
+	var localGrid;
+	var remoteGrid = [null, null, null];
 
 	start(local_data);
 
@@ -49,13 +50,13 @@ function start(localClientName){
 }
 
 function setUpLocalGrid(msg, name){
-	var localGrid = new Grid($('#padContainerLocal'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+	localGrid = new Grid($('#padContainerLocal'), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
 
 	$('.containerLocal').css('max-width', (localGridBlock.size + localGridBlock.margin) * gridSize + ((localGridBlock.size* 2) + localGridBlock.margin));
 	$('.containerLocal').css('height', (localGridBlock.size + localGridBlock.margin) * gridSize + 100);
 
 	localGrid.init(name, msg); //Grid A is the users own grid
-	localGrid.loopThroughGrid();
+	localGrid.loopThroughGrid(0);
 }
 
 function setUpRemoteGrids(msg){
@@ -64,9 +65,8 @@ function setUpRemoteGrids(msg){
 
 	for(var i = 0; i < grids.length; i++){
 		//console.log(i);
-		if(remoteGridUsed[i] === false){
-			var remoteGrid = new Grid($('#padContainerRemote' + i), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
-			remoteGridUsed[i] = true;
+		if(remoteGrid[i] === null){
+			remoteGrid[i] = new Grid($('#padContainerRemote' + i), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
 
 			$('.containerRemote' + i).css('max-width', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize);
 			$('.containerRemote' + i).css('height', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize + 100);
@@ -78,8 +78,8 @@ function setUpRemoteGrids(msg){
 				volume: grids[i].vol
 			};
 
-			remoteGrid.init(grids[i].name, newMsg);
-			remoteGrid.loopThroughGrid();
+			remoteGrid[i].init(grids[i].name, newMsg);
+			remoteGrid[i].loopThroughGrid(localGrid.getPlayHead());
 		}
 	}
 }
