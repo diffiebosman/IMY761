@@ -26,6 +26,7 @@
 	instrument.setVolume(50);
 
 	var clientSocket = new ClientSocket(); //Used for all communication with server other than signing in
+	var remoteGridUsed = [false, false, false]; //Tracks which grid have already been initialized, prevents duplication when a new user joins
 
 	start(local_data);
 
@@ -42,6 +43,9 @@ function start(localClientName){
 	//Request the grids of other connected users (remote users)
 	loginSocket.getRemoteGrids(localClientName);
 	loginSocket.remoteGridResponse(setUpRemoteGrids, localClientName);
+
+	//Waits for new users to join and adds grids for them without refreshing
+	loginSocket.listentForNewUsers(localClientName);
 }
 
 function setUpLocalGrid(msg, name){
@@ -60,19 +64,22 @@ function setUpRemoteGrids(msg){
 
 	for(var i = 0; i < grids.length; i++){
 		//console.log(i);
-		var remoteGrid = new Grid($('#padContainerRemote' + i), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+		if(remoteGridUsed[i] === false){
+			var remoteGrid = new Grid($('#padContainerRemote' + i), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+			remoteGridUsed[i] = true;
 
-		$('.containerRemote' + i).css('max-width', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize);
-		$('.containerRemote' + i).css('height', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize + 100);
+			$('.containerRemote' + i).css('max-width', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize);
+			$('.containerRemote' + i).css('height', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize + 100);
 
-		var newMsg = {
-			type: "initResponse",
-			owner: grids[i].name,
-			data: grids[i].grid,
-			volume: grids[i].vol
-		};
+			var newMsg = {
+				type: "initResponse",
+				owner: grids[i].name,
+				data: grids[i].grid,
+				volume: grids[i].vol
+			};
 
-		remoteGrid.init(grids[i].name, newMsg); //Grid A is the users own grid
-		remoteGrid.loopThroughGrid();
+			remoteGrid.init(grids[i].name, newMsg);
+			remoteGrid.loopThroughGrid();
+		}
 	}
 }

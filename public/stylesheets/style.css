@@ -121,7 +121,7 @@ input[type='submit']:active{
 }
 
 .containerRemote1{
-	float: left;
+	float: left;	
 }
 
 .containerRemote2{
@@ -290,4 +290,9 @@ div.controls div.controlDial div:hover{
 	-moz-transition: all 0.3s;
 	-o-transition: all 0.3s;
 	transition: all 0.3s;		
+}
+
+.remoteName{
+	font-weight: bold;
+	text-align: center;
 }

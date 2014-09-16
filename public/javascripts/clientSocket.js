@@ -32,6 +32,16 @@ var ClientSocket = function(){
         });
     };
 
+    this.listentForNewUsers = function(name){
+        socket.on('response', function(msg){
+            if(msg.type == "newUserJoined" && msg.owner !== name){
+                //setupFunc(msg);
+                console.log(msg.owner + " has joined");
+                socket.emit('getRemoteGrids', name);
+            }
+        });
+    };
+
     // Send toggled notes to the server for broadcast, buffers the notes and sends after 200ms if no new notes are toggled
     // Buffering this may not be necessary, I'm not sure if it helps
     // @param x = x-coordinate on grid

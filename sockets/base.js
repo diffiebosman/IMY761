@@ -43,6 +43,14 @@ module.exports = function(io){
 
       socket.emit('response', msg);
 
+      if(result === null){
+        msg = {
+          type: "newUserJoined",
+          owner: clientName
+        };
+
+        socket.broadcast.emit('response', msg);
+      }
     });
 
     //Fetches all the remote grids for the requesting client

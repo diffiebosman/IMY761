@@ -107,6 +107,8 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			});
 		}
 
+		$(container).parent().find('.remoteName').text(name);
+
 		// This needs to run for every grid as part of its set-up, this duplicates the state of the grid in the server
 		if(msg.type === "initResponse" && msg.data !== null){
 				console.log(msg);
