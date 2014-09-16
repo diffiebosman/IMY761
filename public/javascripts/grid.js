@@ -111,7 +111,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 
 		// This needs to run for every grid as part of its set-up, this duplicates the state of the grid in the server
 		if(msg.type === "initResponse" && msg.data !== null){
-				console.log(msg);
+				//console.log(msg);
 				//duplicate state of server grid in the browser
 				for(var x = 0; x < gridSize; x++){
 					for(var y = 0; y < gridSize; y++){
@@ -232,7 +232,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 
 	//Updates the grid according to responses from the server
 	function synchronise(msg){
-		console.log(msg);
+		//console.log(msg);
 
 		if(msg.type === "toggleNote"){
 			updateGrid(msg.xval, msg.yval);

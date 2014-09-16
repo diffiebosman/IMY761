@@ -28,11 +28,23 @@ var ClientSocket = function(){
         socket.on('response', function(msg){
             if(msg.type == "getRemoteGrids" && msg.owner === name){
                 setupFunc(msg);
+
+                // I'm hoping that this will happen as soon as all the grids are set up, if not we're gonna have to implement
+                // some sort of callback function 
+                socket.emit('gridsLoaded', name);
             }
         });
     };
 
-    this.listentForNewUsers = function(name){
+    this.gridsLoadedResponse = function(setupFunc, name){
+        socket.on('response', function(msg){
+            if(msg.type == "gridsLoaded" && msg.owner === name){
+                setupFunc(msg);
+            }
+        });   
+    }
+
+    this.listenForNewUsers = function(name){
         socket.on('response', function(msg){
             if(msg.type == "newUserJoined" && msg.owner !== name){
                 //setupFunc(msg);

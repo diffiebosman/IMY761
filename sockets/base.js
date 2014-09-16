@@ -158,6 +158,16 @@ module.exports = function(io){
 
       socket.broadcast.emit('response', msg);
     });
+
+    socket.on('gridsLoaded', function(name){
+      var msg = {
+        type: "gridsLoaded",
+        owner: name,
+        data: persistentGrid.length
+      };
+
+      socket.emit('response', msg);
+    });    
   });
 
 };

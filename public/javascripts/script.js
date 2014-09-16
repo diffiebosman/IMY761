@@ -20,18 +20,21 @@
 	//Global factories
 	var context = new (window.AudioContext || window.webkitAudioContext)();
 	var bus = new AudioBus(context);
+
+	bus.connect(context.destination);
+
 	//var instrument = new Oscillator(context, bus, A, minorScale);
 	var instrument = new SamplePlayer(context, bus, A, pentatonicScale, 'rhodes');
-	instrument.init();
+	
 	instrument.setVolume(50);
 
 	var clientSocket = new ClientSocket(); //Used for all communication with server other than signing in
 	var localGrid;
 	var remoteGrid = [null, null, null];
 
-	start(local_data);
+	instrument.init();
 
-	bus.connect(context.destination);
+	start(local_data);
 
 function start(localClientName){
 	//Only used for setting up
@@ -46,7 +49,12 @@ function start(localClientName){
 	loginSocket.remoteGridResponse(setUpRemoteGrids, localClientName);
 
 	//Waits for new users to join and adds grids for them without refreshing
-	loginSocket.listentForNewUsers(localClientName);
+	loginSocket.listenForNewUsers(localClientName);
+
+	//After all grids have been initialized, start looping through them
+	loginSocket.gridsLoadedResponse(loopThroughGrids, localClientName);
+
+	
 }
 
 function setUpLocalGrid(msg, name){
@@ -56,7 +64,7 @@ function setUpLocalGrid(msg, name){
 	$('.containerLocal').css('height', (localGridBlock.size + localGridBlock.margin) * gridSize + 100);
 
 	localGrid.init(name, msg); //Grid A is the users own grid
-	localGrid.loopThroughGrid(0);
+	//localGrid.loopThroughGrid(0);
 }
 
 function setUpRemoteGrids(msg){
@@ -79,7 +87,17 @@ function setUpRemoteGrids(msg){
 			};
 
 			remoteGrid[i].init(grids[i].name, newMsg);
-			remoteGrid[i].loopThroughGrid(localGrid.getPlayHead());
+			//remoteGrid[i].loopThroughGrid(localGrid.getPlayHead());
 		}
+	}
+}
+
+// start simultaneously looping through all the grids
+function loopThroughGrids(msg){
+	var length = msg.data;
+
+	localGrid.loopThroughGrid(0);
+	for(var i = 0; i < length-1; i++){
+		remoteGrid[i].loopThroughGrid(localGrid.getPlayHead());
 	}
 }
