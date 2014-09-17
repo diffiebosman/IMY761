@@ -64,7 +64,7 @@ function setUpLocalGrid(msg, name){
 	$('.containerLocal').css('height', (localGridBlock.size + localGridBlock.margin) * gridSize + 100);
 
 	localGrid.init(name, msg); //Grid A is the users own grid
-	//localGrid.loopThroughGrid(0);
+	localGrid.loopThroughGrid(0);
 }
 
 function setUpRemoteGrids(msg){
@@ -96,7 +96,7 @@ function setUpRemoteGrids(msg){
 function loopThroughGrids(msg){
 	var length = msg.data;
 
-	localGrid.loopThroughGrid(0);
+	localGrid.loopThroughGrid(localGrid.getPlayHead());
 	for(var i = 0; i < length-1; i++){
 		remoteGrid[i].loopThroughGrid(localGrid.getPlayHead());
 	}

@@ -167,7 +167,7 @@ module.exports = function(io){
       };
 
       socket.emit('response', msg);
-    });    
+    });
   });
 
 };

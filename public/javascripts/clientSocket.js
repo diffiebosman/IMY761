@@ -30,7 +30,7 @@ var ClientSocket = function(){
                 setupFunc(msg);
 
                 // I'm hoping that this will happen as soon as all the grids are set up, if not we're gonna have to implement
-                // some sort of callback function 
+                // some sort of callback function
                 socket.emit('gridsLoaded', name);
             }
         });
@@ -41,8 +41,8 @@ var ClientSocket = function(){
             if(msg.type == "gridsLoaded" && msg.owner === name){
                 setupFunc(msg);
             }
-        });   
-    }
+        });
+    };
 
     this.listenForNewUsers = function(name){
         socket.on('response', function(msg){
