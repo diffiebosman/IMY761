@@ -23,8 +23,15 @@
 
 	bus.connect(context.destination);
 
+	var instrument;
 	//var instrument = new Oscillator(context, bus, A, minorScale);
-	var instrument = new SamplePlayer(context, bus, A, pentatonicScale, 'rhodes');
+	if(local_instrument == 'oscillator'){
+		instrument = new Oscillator(context, bus, A, minorScale);
+	}
+	else{
+		instrument = new SamplePlayer(context, bus, A, pentatonicScale, local_instrument);
+	}
+	
 	
 	instrument.setVolume(50);
 

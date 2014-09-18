@@ -3,6 +3,19 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+
+		<script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('.instrumentContainer ul li').on('click', function(){
+					$('.selected').removeClass('selected');
+					$(this).addClass('selected');
+					//var _class = $(this).attr('class');
+					//$('input[value="'+_class+'"]').prop("checked", true);
+					$('input.instrument').val($(this).html());
+				});
+			});
+		</script>
 	</head>
 
 	<body>
@@ -14,6 +27,18 @@
 			<h2>Enter a username</h2>
 			<form method="POST" action="/test">
 				<input type="text" name="username" id="username" /> <br/>
+				<div>
+					<h2>Select an instrument:</h2>
+					<div class='instrumentContainer'>
+						<ul>
+							<li class="instrument1 animated">Oscillator</li>
+							<li class="instrument2 animated">Vibraphone</li>
+							<li class="instrument3 animated">Rhodes</li>
+							<li class="instrument4 animated">Instrument4</li>
+						</ul>
+					</div>
+					<input type="hidden" class="instrument" name="instrument" value="" />
+				</div>
 				<input type="submit" name="login" title="login" value="Login" id="login"/> 
 			</form>
 		</div>

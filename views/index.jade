@@ -1,7 +1,31 @@
-extends layout
+doctype html
+html
+	head
+		title= title
+		link(type='text/css', rel='stylesheet', href=public+'/stylesheets/style.css')
+		link(type='text/css', rel='stylesheet', href=public+'/font-awesome-4.1.0/css/font-awesome.min.css')   
 
-h1= Welcome Jade
-h2= Enter a username
-form(method='POST', action='/test')
-	input(type='text', name='username', id='username')
-	input(type='submit', name='login', title='login', value='Login', id='login')
+		script(type='text/javascript')
+			var local_data = !{JSON.stringify(login)};
+
+		script(type='text/javascript', src=public+'/javascripts/jquery-1.11.1.min.js')
+		script(type='text/javascript', src=public+'/javascripts/jquery.knob.js')
+		script(type='text/javascript', src=public+'/socket.io/socket.io.js')
+		script(type='text/javascript', src=public+'/javascripts/tuna.js')
+		script(type='text/javascript', src=public+'/javascripts/audiobus.js')
+		script(type='text/javascript', src=public+'/javascripts/howler.js')
+		script(type='text/javascript', src=public+'/javascripts/oscillator.js')
+		script(type='text/javascript', src=public+'/javascripts/samplePlayer.js')
+		script(type='text/javascript', src=public+'/javascripts/grid.js')
+		script(type='text/javascript', src=public+'/javascripts/clientSocket.js')
+		script(type='text/javascript', src=public+'/javascripts/script.js')
+
+	body
+		block content
+			header.centered
+				h1= "Welcome Jade"
+			div.container
+				h2= "Enter a username"
+				form(method='POST', action='/test')
+					input(type='text', name='username', id='username')
+					input(type='submit', name='login', title='login', value='Login', id='login')
