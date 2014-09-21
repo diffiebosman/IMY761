@@ -25,7 +25,7 @@
 
 	var instrument;
 	//var instrument = new Oscillator(context, bus, A, minorScale);
-	if(local_instrument == 'oscillator'){
+	if(local_instrument == 'Oscillator'){
 		instrument = new Oscillator(context, bus, A, minorScale);
 	}
 	else{

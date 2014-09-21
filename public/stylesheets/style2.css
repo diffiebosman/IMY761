@@ -1,0 +1,407 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	/**background-color: #555;**/
+	font-family: 'Open Sans', arial;
+	color: #555;
+
+}
+
+.container{
+	width: 100%;
+	max-width: 540px;
+	text-align: center;
+
+}
+
+.instrumentContainer{
+	width: 100%;
+	height: 300px;
+	border: 1px solid #AAA;
+	margin: 20px 0px;
+	padding: 0px 10px;
+	border-radius: 5px;
+}
+
+header{
+	text-align: center;
+	padding: 50px 0;
+	background-color: #CFE7FF;
+	border-bottom: 1px solid #AAA;
+}
+
+h1{
+	font-size: 48px;
+	text-shadow: 0px 1px 0px #FFF;
+}
+
+h2{
+	margin-top: 50px;
+	margin-bottom: 20px;
+}
+
+ul{
+	list-style: none;
+	width: 100%;
+	margin-top: 10px;
+}
+
+ul li{
+	display: inline-block;
+	width: 265px;
+	position: relative;
+	height: 44px;
+	padding-top: 22px;
+	border: 1px solid #FFF;
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+
+ul li:hover{
+	border: 1px solid #DDD;
+	cursor: pointer;
+}
+
+ul li.selected{
+	border: 1px solid #AAA;
+}
+
+ul li:before{
+	content: '';
+	height: 40px;
+	width: 40px;
+	
+	border: none;
+	border-radius: 5px;
+	position: absolute;
+	left: 35px;
+	top: 14px;
+}
+
+/**************  LOGIN PAGE INSTRUMENTS   ******************/
+.instrumentContainer .instrument1:before{
+	background-color: #CFE7FF;
+}
+
+.instrumentContainer .instrument2:before{
+	background-color: #FFCFCF;
+}
+
+.instrumentContainer .instrument3:before{
+	background-color: #FFCD98;
+}
+
+.instrumentContainer .instrument4:before{
+	background-color: #AC8E78;
+}
+/***********************************************************/
+
+div.radioButtons{
+	/*display: none;*/
+}
+
+input[type='text']{
+	height: 25px;
+	width: 200px;
+	line-height: 20px;
+	border: 1px solid #AAA;
+	margin-bottom: 20px;
+	padding-left: 5px;
+
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;	
+}
+
+input[type='text']:focus{
+	box-shadow: 0px 1px 3px #CFE7FF, 0px -1px 3px #CFE7FF, 1px 0px 3px #CFE7FF, -1px 0px 3px #CFE7FF;
+	outline: none;
+
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;	
+}
+
+input[type='submit']{
+	text-indent:0;
+	border:none;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	font-style:normal;
+	height:30px;
+	line-height:30px;
+	width:100px;
+	text-decoration:none;
+	text-align:center;
+
+	background-color: #CFE7FF;
+
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;	
+}
+
+input[type='submit']:hover{
+	background-color: #888;
+	color: #FFF;
+
+	cursor: pointer;
+
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;	
+}
+
+input[type='submit']:active{
+	position:relative;
+}
+
+.centered{
+	margin-left: auto;
+	margin-right: auto;	
+}
+
+.containerLocal{
+	max-width: 200px;
+	width: 100%;
+}
+
+.containerLocal h1{
+	text-align: center;
+}
+
+.containerRemote0, .containerRemote1, .containerRemote2{
+	max-width: 980px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.containerRemote1{
+	float: left;	
+}
+
+.containerRemote2{
+	float: right;
+}
+
+#padContainerLocal{
+	
+}
+
+#padContainerLocal hr{
+	border: 3px solid #DDD;
+	border-radius: 10px;
+}
+
+#padContainerRemote{
+	position: absolute;
+	bottom: 100px;
+	left: 700px;
+}
+
+#padContainerRemote hr{
+	border: 3px solid #DDD;
+	border-radius: 10px;
+}
+
+i{
+	color: #B8D0E8;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
+}
+
+i:hover{
+	color: #637D98;
+
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;	
+}
+
+.arrowRow i{
+	width: 20px;
+	margin-right: 8px;
+	text-align: center;
+}
+
+.arrowRow i:first-child{
+	margin-left: 28px;
+}
+
+.padRow div i.fa{
+	display: block;
+	width: 28px;
+	height: 20px;
+	margin-bottom: 4px;
+	padding-top: 3px;
+	text-align: center;	
+}
+
+i.fa-chevron-circle-right{
+	float: left;
+}
+
+i.fa-chevron-circle-left{
+	float: right;
+}
+
+.padRow div {
+	width:20px;
+	height:20px;
+	margin-right: 8px;
+	margin-bottom: 8px;
+
+	/*box-shadow: 0px 3px 0px #CBE5FF;*/
+	float: left;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;		
+}
+
+.padRow div.block{
+	background-color: #FFF;
+	width:18px;
+	height:18px;
+	margin-right: 8px;
+	margin-bottom: 8px;
+	border: 1px solid #CBE5FF;
+	border-radius: 3px;
+	/*box-shadow: 0px 3px 0px #CBE5FF;*/
+	float: left;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;		
+}
+
+.containerRemote .padRow div {
+	width:8px;
+	height:8px;
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+
+.containerLocal .padRow div:first-child, .containerLocal .padRow div:last-child{
+	background-color: #FFF;
+	border: 0px;
+	box-shadow: none;
+}
+
+.containerLocal .padRow div:first-child:hover, .containerLocal .padRow div:last-child:hover{
+	box-shadow: none;
+}
+
+.padRow div:last-child {
+	margin-right: 0;
+}
+
+.containerLocal .padRow div:hover{
+	box-shadow: 0px 0px 1px 2px #CBE5FF inset;	
+	border-color: #FFF;
+	cursor: pointer;
+
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;		
+}
+
+.containerLocal .padRow div.active:hover{
+	box-shadow: 0px 0px 2px 2px #637D98 inset;		
+}		
+
+.containerLocal .padRow div.active.highlighted:hover{
+	box-shadow: 0px 0px 2px 2px #ACFAAF inset;
+}		
+
+.padRow div.highlighted{
+	border-color: #888;
+}
+
+.padRow div.active{
+	background-color: #637D98;
+	border-color: #637D98;
+}
+
+.padRow div.active.highlighted{
+	background-color: #ACFAAF;
+	border-color: #ACFAAF;
+
+}
+
+div.controls{
+	width: 100%;
+	text-align: center;
+}
+
+div.controls i{
+	font-size: 36px;
+	margin-left: 50px !important;
+	margin-right: 50px !important;	
+	margin-top: -10px;
+}
+
+
+div.controls * {
+
+}
+
+div.controls div.controlDial{
+	margin-left: 50px !important;
+	margin-right: 50px !important;
+	display: inline;
+
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;		
+}
+
+div.controls div.controlDial div input{
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;	
+}
+
+div.controls div.controlDial div:hover{
+	cursor: pointer;
+}
+
+.animated{
+	-webkit-transition: all 0.4s;
+	-moz-transition: all 0.4s;
+	-o-transition: all 0.4s;
+	transition: all 0.4s;		
+}
+
+.remoteName{
+	font-weight: bold;
+	text-align: center;
+}

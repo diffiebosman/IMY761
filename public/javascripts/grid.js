@@ -68,7 +68,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				);
 
 			/*************   EVENT HANDLERS  ***************************/
-			$(container).find("div.padRow div").each(function(){
+			$(container).find("div.padRow div.block").each(function(){
 				$(this)
 				.on('mousedown',function(){
 					updateGrid($(this).data('x'), $(this).data('y'));
