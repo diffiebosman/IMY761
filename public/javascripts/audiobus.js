@@ -31,7 +31,7 @@ var AudioBus = function(context){
 	var delay = new tuna.Delay({
         feedback: 0.3,    //0 to 1+
         delayTime: 250,    //how many milliseconds should the wet signal be delayed? 
-        wetLevel: 0.15,    //0 to 1+
+        wetLevel: 0.03,    //0 to 1+
         dryLevel: 0.05,       //0 to 1+
         cutoff: 20000,        //cutoff frequency of the built in highpass-filter. 20 to 22050
         bypass: 0

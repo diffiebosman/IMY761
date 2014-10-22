@@ -53,13 +53,16 @@ ul{
 
 ul li{
 	display: inline-block;
-	width: 265px;
+	width: 175px;
 	position: relative;
 	height: 44px;
 	padding-top: 22px;
 	border: 1px solid #FFF;
 	border-radius: 5px;
 	margin-bottom: 5px;
+
+	text-align: left;
+	padding-left: 90px;
 }
 
 ul li:hover{
@@ -218,7 +221,7 @@ input[type='submit']:active{
 }
 
 i{
-	color: #B8D0E8;
+	/*color: #B8D0E8;*/
 	cursor: pointer;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -229,7 +232,7 @@ i{
 }
 
 i:hover{
-	color: #637D98;
+	/**color: #637D98;**/
 
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
@@ -264,15 +267,99 @@ i.fa-chevron-circle-left{
 	float: right;
 }
 
-.padRow div {
+/**************  GRID COLOURS   ******************/
+
+.Oscillator .padRow div{
 	background-color: #B8D0E8;
+	box-shadow: 0px 3px 0px #CBE5FF;
+}
+
+.Oscillator i{
+	color: #B8D0E8;
+}
+
+.Oscillator i:hover{
+	color: #637D98;
+}
+
+.Oscillator .padRow div.active{
+	background-color: #637D98;
+}
+
+
+
+
+
+
+.Vibraphone .padRow div{
+	background-color: #FFCFCF;
+	box-shadow: 0px 3px 0px #DBB6B6;
+}
+
+.Vibraphone i{
+	color: #FFCFCF;
+}
+
+.Vibraphone i:hover{
+	color: #997A7A;
+}
+
+.Vibraphone .padRow div.active{
+	background-color: #997A7A;
+}
+
+
+
+
+.Rhodes .padRow div{
+	background-color: #FFCD98;
+	box-shadow: 0px 3px 0px #DAAF83;
+}
+
+.Rhodes i{
+	color: #FFCD98;
+}
+
+.Rhodes i:hover{
+	color: #BB9772;
+}
+
+.Rhodes .padRow div.active{
+	background-color: #BB9772;
+}
+
+
+
+
+
+.Drums .padRow div{
+	background-color: #AC8E78;
+	box-shadow: 0px 3px 0px #8D7563;
+}
+
+.Drums i{
+	color: #AC8E78;
+}
+
+.Drums i:hover{
+	color: #705D4F;
+}
+
+.Drums .padRow div.active{
+	background-color: #705D4F;
+}
+
+/*************************************************/
+
+.padRow div {
+	
 	width:20px;
 	height:20px;
 	margin-right: 8px;
 	margin-bottom: 8px;
 	
 	border-radius: 3px;
-	box-shadow: 0px 3px 0px #CBE5FF;
+	
 	float: left;
 
 	-webkit-touch-callout: none;
@@ -318,9 +405,7 @@ i.fa-chevron-circle-left{
 	background-color: #EEE;
 }
 
-.padRow div.active{
-	background-color: #637D98;
-}
+
 
 .padRow div.active.highlighted{
 	background-color: #ACFAAF;

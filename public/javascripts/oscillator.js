@@ -1,6 +1,7 @@
 var Oscillator = function(context, audiobus, baseNote, scale){
 	var semitoneRatio = Math.pow(2, 1/12);
 
+
 	// Gets the appropriate amount of semitones from the root note
 	// @param step = the number of steps of the note above the root note in the scale
 	// @param scale = the scale used 
@@ -32,6 +33,7 @@ var Oscillator = function(context, audiobus, baseNote, scale){
 
     	//g.gain.value = 0;
 
+    	//sets the gain to 0 before ending the note (to get rid of that clicking sound)
 		osc.noteOn(0);
 		setTimeout(function(){g.gain.value = 1;}, 0);
 		setTimeout(function(){g.gain.value = 0;}, 200);
@@ -55,4 +57,7 @@ var Oscillator = function(context, audiobus, baseNote, scale){
 		audiobus.setDrive(value);
 		//console.log(value);
 	}	
+
+	//used for setting the grid colours
+	this.name = "Oscillator";
 }
