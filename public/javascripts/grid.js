@@ -22,6 +22,8 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			}
 		}
 
+		$(container).addClass(instrument.name);
+
 		for(var i = 0; i < gridSize; i++){
 			$(container).append('<div class="padRow" data-y="'+i+'"></div>');
 		}
@@ -37,6 +39,23 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 		clientSocket.listen(synchronise, owner);
 
 		// You can only control your own grid
+
+		var gridColor;
+		switch(instrument.name){
+			case "Oscillator": 
+				gridColor = '#B8D0E8';
+				break;
+			case "Vibraphone": 
+				gridColor = '#FFCFCF';
+				break;
+			case "Rhodes": 
+				gridColor = '#FFCD98';
+				break;	
+			case "Drums": 
+				gridColor = '#AC8E78';
+				break;								
+		}
+
 		if(isLocal)
 		{
 			var volumeDial = $('<input>')
@@ -46,7 +65,7 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				'class': 'volumeDial',
 				'data-width': '36',
 				'data-height': '36',
-				'data-fgColor': '#B8D0E8',
+				'data-fgColor': gridColor,
 				'data-angleOffset': '-125',
 				'data-angleArc': '250'
 			});
