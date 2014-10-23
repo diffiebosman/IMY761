@@ -6,27 +6,46 @@
 
 		<script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
 		<script type="text/javascript">
-			$(document).ready(function(){
-				$('.instrumentContainer ul li').on('click', function(){
-					$('.selected').removeClass('selected');
-					$(this).addClass('selected');
-					//var _class = $(this).attr('class');
-					//$('input[value="'+_class+'"]').prop("checked", true);
-					$('input.instrument').val($(this).html());					
-				});
+			$(document).ready(function(){						
+				checkAvailability();				
 
-			$.get('/instrumentsAvailable').done(
-				function(data){ 					
-					var instrumentArray = data.vartest.arr;
-
-					for(var i = 0; i < instrumentArray.length; i++){
-						$('.instrumentContainer ul li').each(function(){
-							if(instrumentArray[i] === $(this).html()){
-								$(this).html("USED");
-							}
-						});
+				function checkLock(selection){
+					if($(selection).hasClass('locked') === false){						
+						$('.selected').removeClass('selected');
+						$(selection).addClass('selected');
+						$('input.instrument').val($(selection).html());	
 					}
-				});
+					else
+					{
+						$('input.instrument').val("");	
+					}
+				}
+
+				function checkAvailability(){
+					$.get('/instrumentsAvailable').done(
+					function(data){ 					
+						var instrumentArray = data.vartest.arr;
+
+						for(var i = 0; i < instrumentArray.length; i++){
+							$('.instrumentContainer ul li').each(function(){
+								if(instrumentArray[i] === $(this).html()){
+									$(this).addClass('locked');
+									var text = $(this).html() + " (In Use)";
+									$(this).html(text);
+								}
+							});
+						}
+					});
+				}
+
+				$('.instrumentContainer ul li').on('click', function(){
+					var callbacks = $.Callbacks();	
+					callbacks.add(checkAvailability);
+					callbacks.fire();
+					callbacks.add(checkLock);
+					callbacks.fire($(this));
+					
+				});					
 			});
 		</script>
 	</head>
@@ -39,7 +58,7 @@
 			
 			<h2>Enter a username</h2>
 			<form method="POST" action="/test">
-				<input type="text" name="username" id="username" /> <br/>
+				<input type="text" name="username" id="username" required/> <br/>
 				<div>
 					<h2>Select an instrument:</h2>
 					<div class='instrumentContainer'>
@@ -50,7 +69,7 @@
 							<li class="instrument4 animated">Drums</li>
 						</ul>
 					</div>
-					<input type="hidden" class="instrument" name="instrument" value="" />
+					<input type="hidden" class="instrument" name="instrument" value="" required/>
 				</div>
 				<input type="submit" name="login" title="login" value="Login" id="login"/> 
 			</form>
