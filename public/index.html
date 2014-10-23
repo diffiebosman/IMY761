@@ -12,7 +12,20 @@
 					$(this).addClass('selected');
 					//var _class = $(this).attr('class');
 					//$('input[value="'+_class+'"]').prop("checked", true);
-					$('input.instrument').val($(this).html());
+					$('input.instrument').val($(this).html());					
+				});
+
+			$.get('/instrumentsAvailable').done(
+				function(data){ 					
+					var instrumentArray = data.vartest.arr;
+
+					for(var i = 0; i < instrumentArray.length; i++){
+						$('.instrumentContainer ul li').each(function(){
+							if(instrumentArray[i] === $(this).html()){
+								$(this).html("USED");
+							}
+						});
+					}
 				});
 			});
 		</script>

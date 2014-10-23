@@ -1,5 +1,6 @@
 var PersistentGrid = require('../sockets/persistentGrid');
 var persistentGrid = [];
+var usedInstruments = [];
 
 //Search the grids for the index of the clients grid
 function getIndex(name){
@@ -14,12 +15,37 @@ function getIndex(name){
   return index;
 }
 
+function checkInstrument(instrument){
+  var index;
+
+  for (var i = 0; i < usedInstruments.length; i++){
+    if(usedInstruments[i] === instrument){
+      index = i;
+    }
+  }
+
+  return index;
+}
+
 module.exports = function(io){
+
+  var test = "hello";
 
   io.on('connection', function(socket){
 
     //Check if the connecting client has a grid associated with it
-    socket.on('initGrid', function(gridSize, clientName){
+    socket.on('initGrid', function(gridSize, clientName, instrument){
+      var instrumentIndex = checkInstrument(instrument);
+
+      if(instrumentIndex === undefined){
+        usedInstruments.push(instrument);
+        console.log(instrument + " has been added!");
+      }
+      else
+      {
+        console.log(instrument + " is already in use!");
+      }
+
       var index = getIndex(clientName);
 
       //If the client doesn't own a grid, create one for the client. Else retrieve the state of the client's grid
@@ -171,3 +197,5 @@ module.exports = function(io){
   });
 
 };
+
+module.exports.test = {arr: usedInstruments};

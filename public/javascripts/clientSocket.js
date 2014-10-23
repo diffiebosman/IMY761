@@ -6,8 +6,8 @@ var ClientSocket = function(){
 
     //Inform the server of the size of the grid to be used
     // @param gridSize = size of Note Grid
-    this.signIn = function(gridSize, name){
-        socket.emit('initGrid', gridSize, name);
+    this.signIn = function(gridSize, name, instrument){
+        socket.emit('initGrid', gridSize, name, instrument);
     };
 
     //Returns the servers response to the log in request

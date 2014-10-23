@@ -41,15 +41,15 @@
 
 	instrument.init();
 
-	start(local_data);
+	start(local_data, local_instrument);
 
-function start(localClientName){
+function start(localClientName, instrument){
 	//Only used for setting up
 	var loginSocket = new ClientSocket();
 
 	//Send server the clients name for setting up local grid
 	loginSocket.signInResponse(setUpLocalGrid, localClientName);
-	loginSocket.signIn(gridSize, localClientName);
+	loginSocket.signIn(gridSize, localClientName, instrument);
 
 	//Request the grids of other connected users (remote users)
 	loginSocket.getRemoteGrids(localClientName);
