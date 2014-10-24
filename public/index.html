@@ -6,7 +6,9 @@
 
 		<script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
 		<script type="text/javascript">
-			$(document).ready(function(){						
+			$(document).ready(function(){	
+				$("p#loginErrorInstrument").hide();
+				$("p#loginErrorUsername").hide();
 				checkAvailability();				
 
 				function checkLock(selection){
@@ -22,7 +24,7 @@
 				}
 
 				function checkAvailability(){
-					$.get('/instrumentsAvailable').done(
+					return $.get('/instrumentsAvailable').done(
 					function(data){ 					
 						var instrumentArray = data.vartest.arr;
 
@@ -39,13 +41,51 @@
 				}
 
 				$('.instrumentContainer ul li').on('click', function(){
-					var callbacks = $.Callbacks();	
-					callbacks.add(checkAvailability);
-					callbacks.fire();
-					callbacks.add(checkLock);
-					callbacks.fire($(this));
-					
-				});					
+					var selection = $(this);
+
+					$.when(checkAvailability()).done(function(){
+					    checkLock(selection);
+					});
+				});	
+
+				$("input#login").click(function(){
+					var errorUsername = false;
+					var errorInstrument = false;
+
+					if($('input#username').val() === ""){
+						$("p#loginErrorUsername").show();
+						$("input#username").css({
+							'border-color': 'red'							
+						});
+						errorUsername = true;
+					}	
+					else{
+						$("p#loginErrorUsername").hide();
+						$("input#username").css({
+							'border-color': ''							
+						});
+						errorUsername = false;
+					}
+
+					if($('input.instrument').val() === ""){
+						$("p#loginErrorInstrument").show();
+						$(".instrumentContainer").css({
+							'border-color': 'red'						
+						});
+						errorInstrument = true;
+					}				
+					else{
+						$("p#loginErrorInstrument").hide();
+						$(".instrumentContainer").css({
+							'border-color': ''						
+						});
+						errorInstrument = false;
+					}
+
+					if(errorUsername === true || errorInstrument === true){
+						return false;
+					}						
+				});				
 			});
 		</script>
 	</head>
@@ -57,10 +97,12 @@
 		<div class="container centered">
 			
 			<h2>Enter a username</h2>
+			<p id = "loginErrorUsername" class = "loginError"> Please enter a valid username. </p>
 			<form method="POST" action="/test">
-				<input type="text" name="username" id="username" required/> <br/>
+				<input type="text" name="username" id="username"/> <br/>
 				<div>
 					<h2>Select an instrument:</h2>
+					<p id = "loginErrorInstrument" class = "loginError"> Please select an instrument not in use. </p>
 					<div class='instrumentContainer'>
 						<ul>
 							<li class="instrument1 animated">Oscillator</li>
@@ -69,9 +111,9 @@
 							<li class="instrument4 animated">Drums</li>
 						</ul>
 					</div>
-					<input type="hidden" class="instrument" name="instrument" value="" required/>
-				</div>
-				<input type="submit" name="login" title="login" value="Login" id="login"/> 
+					<input type="hidden" class="instrument" name="instrument" value=""/>
+				</div>				
+				<input type="submit" name="login" title="login" value="Login" id="login"/>								
 			</form>
 		</div>
 	</body>

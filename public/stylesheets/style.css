@@ -96,6 +96,11 @@ ul li:before{
 	top: 14px;
 }
 
+p.loginError{
+	color: red;
+	margin: 10px;
+}
+
 /**************  LOGIN PAGE INSTRUMENTS   ******************/
 .instrumentContainer .instrument1:before{
 	background-color: #CFE7FF;
