@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-var baseTest = require('../sockets/base');
+var checkUse = require('../sockets/base');
 
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' , public: '/public'});
 });
 
-router.get('/instrumentsAvailable', function(req, res){
+router.get('/checkAvailability', function(req, res){
 	res.send({
-		vartest: baseTest.test
+		availability: checkUse.usedArrs
 	});
 });
 

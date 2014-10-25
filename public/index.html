@@ -7,8 +7,10 @@
 		<script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){	
+				var nameArray = [];
 				$("p#loginErrorInstrument").hide();
 				$("p#loginErrorUsername").hide();
+				$("p#loginErrorUsernameUsed").hide();
 				checkAvailability();				
 
 				function checkLock(selection){
@@ -17,16 +19,13 @@
 						$(selection).addClass('selected');
 						$('input.instrument').val($(selection).html());	
 					}
-					else
-					{
-						$('input.instrument').val("");	
-					}
 				}
 
 				function checkAvailability(){
-					return $.get('/instrumentsAvailable').done(
+					return $.get('/checkAvailability').done(
 					function(data){ 					
-						var instrumentArray = data.vartest.arr;
+						var instrumentArray = data.availability.instruments;
+						nameArray = data.availability.names;
 
 						for(var i = 0; i < instrumentArray.length; i++){
 							$('.instrumentContainer ul li').each(function(){
@@ -36,7 +35,7 @@
 									$(this).html(text);
 								}
 							});
-						}
+						}						
 					});
 				}
 
@@ -54,18 +53,34 @@
 
 					if($('input#username').val() === ""){
 						$("p#loginErrorUsername").show();
-						$("input#username").css({
-							'border-color': 'red'							
-						});
+						$("p#loginErrorUsernameUsed").hide();
 						errorUsername = true;
 					}	
 					else{
-						$("p#loginErrorUsername").hide();
+						$("p#loginErrorUsername").hide();						
+						errorUsername = false;
+					}
+
+					for(var i = 0; i < nameArray.length; i++){
+						if(nameArray[i] === $('input#username').val()){
+							$("p#loginErrorUsernameUsed").show();							
+							errorUsername = true;
+						}
+					}
+
+					if(errorUsername === true)
+					{
+						$("input#username").css({
+							'border-color': 'red'							
+						});
+					}
+					else{
 						$("input#username").css({
 							'border-color': ''							
 						});
-						errorUsername = false;
-					}
+
+						$("p#loginErrorUsernameUsed").hide();
+					}					
 
 					if($('input.instrument').val() === ""){
 						$("p#loginErrorInstrument").show();
@@ -98,6 +113,7 @@
 			
 			<h2>Enter a username</h2>
 			<p id = "loginErrorUsername" class = "loginError"> Please enter a valid username. </p>
+			<p id = "loginErrorUsernameUsed" class = "loginError"> That username is already in use. </p>
 			<form method="POST" action="/test">
 				<input type="text" name="username" id="username"/> <br/>
 				<div>
