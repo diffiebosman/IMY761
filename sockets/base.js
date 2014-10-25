@@ -57,7 +57,7 @@ module.exports = function(io){
         console.log(clientName + " already registered. Fetching grid for " + clientName + " at index " + index);
       }
 
-      var result = persistentGrid[index].init(gridSize, clientName);
+      var result = persistentGrid[index].init(gridSize, clientName, instrument);
       var vol = persistentGrid[index].getVolume();
 
       var msg = {
@@ -88,6 +88,7 @@ module.exports = function(io){
         if(persistentGrid[i].getOwner() !== name){
           var remote = {
             name: persistentGrid[i].getOwner(),
+            type: persistentGrid[i].getType(),
             grid: persistentGrid[i].getGrid(),
             vol: persistentGrid[i].getVolume()
           };

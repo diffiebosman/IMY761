@@ -79,9 +79,22 @@ function setUpRemoteGrids(msg){
 	//console.log(grids.length);
 
 	for(var i = 0; i < grids.length; i++){
-		//console.log(i);
+
+		var remoteInstrumentName = grids[i].type; //This identifies the instrument selected by each remote user, use this to create an instrument for each user
+		var remoteInstrument;
+		
+		if(remoteInstrumentName == 'Oscillator'){
+			remoteInstrument = new Oscillator(context, bus, A, minorScale);
+		}
+		else{
+			remoteInstrument = new SamplePlayer(context, bus, A, pentatonicScale, remoteInstrumentName);
+		}
+		
+		
+		instrument.setVolume(50);
+
 		if(remoteGrid[i] === null){
-			remoteGrid[i] = new Grid($('#padContainerRemote' + i), instrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+			remoteGrid[i] = new Grid($('#padContainerRemote' + i), remoteInstrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
 
 			$('.containerRemote' + i).css('max-width', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize);
 			$('.containerRemote' + i).css('height', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize + 100);

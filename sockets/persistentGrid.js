@@ -5,13 +5,15 @@ module.exports = function(){
 	var volume = 50;
 	var initialised = false;
 	var owner = null;
+	var type = null;
 
 	//initialise the grid if it doesnt exist and return null
 	//return the grid if it does already exist
-	this.init = function(gridSize, name){
+	this.init = function(gridSize, name, instrument){
 		if(!initialised){
 			size = gridSize;
 			owner = name;
+			type = instrument;
 			for(var x= 0; x < size; x++){
 				grid.push([]);
 				for(var y = 0; y < size; y++){
@@ -41,6 +43,10 @@ module.exports = function(){
 
 	this.getVolume = function(){
 		return volume;
+	};
+
+	this.getType = function(){
+		return type;
 	};
 
 	this.toggleNote = function(x, y){
