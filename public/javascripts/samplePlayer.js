@@ -39,12 +39,13 @@ var SamplePlayer = function(context, audiobus, baseNote, scale, sampleName){
 
 	// preload samples to avoid lagging when using the samples for the first time
 	this.init = function(){
-		var l;
+		var l; // number of existing samples for an instrument
+
 		if(sampleName == 'Drums')
-			l = 17;
+			l = 16;
 		else l = 38;
 
-		for(var i = 1; i < l; i++){
+		for(var i = 1; i <= l; i++){
 			var sound = new Howl({
 			  urls: ['/samples/'+sampleName+'/'+i+'.wav'],
 			  volume: 0

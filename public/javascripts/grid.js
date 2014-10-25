@@ -54,6 +54,9 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 			case "Drums": 
 				gridColor = '#AC8E78';
 				break;								
+			case "Synth": 
+				gridColor = '#BEBEE9';
+				break;						
 		}
 
 		if(isLocal)

@@ -106,41 +106,29 @@ p.loginError{
 	background-color: #CFE7FF;
 }
 
-.instrumentContainer .instrument1.locked:before{
-	background-color: #DDD;
-	border: solid 1px;
-	border-color: rgb(200, 200, 200);
-}
-
 .instrumentContainer .instrument2:before{
 	background-color: #FFCFCF;
-}
-
-.instrumentContainer .instrument2.locked:before{
-	background-color: #DDD;
-	border: solid 1px;
-	border-color: rgb(200, 200, 200);
 }
 
 .instrumentContainer .instrument3:before{
 	background-color: #FFCD98;
 }
 
-.instrumentContainer .instrument3.locked:before{
-	background-color: #DDD;
-	border: solid 1px;
-	border-color: rgb(200, 200, 200);
-}
-
 .instrumentContainer .instrument4:before{
 	background-color: #AC8E78;
 }
 
-.instrumentContainer .instrument4.locked:before{
+.instrumentContainer .instrument5:before{
+	background-color: #BEBEE9;
+}
+
+.instrumentContainer .instrument.locked:before{
 	background-color: #DDD;
 	border: solid 1px;
 	border-color: rgb(200, 200, 200);
 }
+
+
 /***********************************************************/
 
 div.radioButtons{
@@ -387,6 +375,27 @@ i.fa-chevron-circle-left{
 .Drums .padRow div.active{
 	background-color: #705D4F;
 }
+
+
+
+
+.Synth .padRow div{
+	background-color: #BEBEE9;
+	box-shadow: 0px 3px 0px #9A9ACC;
+}
+
+.Synth i{
+	color: #BEBEE9;
+}
+
+.Synth i:hover{
+	color: #787894;
+}
+
+.Synth .padRow div.active{
+	background-color: #787894;
+}
+
 
 /*************************************************/
 
