@@ -3,8 +3,11 @@ html
 	head
 		title= title
 		link(type='text/css', rel='stylesheet', href='/stylesheets/style.css')
-		link(type='text/css', rel='stylesheet', href='/font-awesome-4.1.0/css/font-awesome.min.css')   
+		link(type='text/css', rel='stylesheet', href='/stylesheets/pace.css')
+		link(type='text/css', rel='stylesheet', href='/font-awesome-4.1.0/css/font-awesome.min.css')
 
+
+		script(type='text/javascript', src='/javascripts/pace.js')
 		script(type='text/javascript').
 			var local_data =!{JSON.stringify(login)};
 			var local_instrument =!{JSON.stringify(instrument)};

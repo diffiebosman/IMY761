@@ -41,7 +41,9 @@
 
 	instrument.init();
 
-	start(local_data, local_instrument);
+	Pace.on('done', function() {
+		start(local_data, local_instrument);
+	});
 
 function start(localClientName, instrument){
 	//Only used for setting up
