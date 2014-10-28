@@ -12,6 +12,10 @@ body{
 
 }
 
+div#master{
+	margin: 30px;
+}
+
 .container{
 	width: 100%;
 	max-width: 540px;
@@ -463,23 +467,20 @@ i.fa-chevron-circle-left{
 div.controls{
 	width: 100%;
 	text-align: center;
+	padding-top: 20px;
 }
 
 div.controls i{
-	font-size: 36px;
+	font-size: 34px;
 	margin-left: 50px !important;
-	margin-right: 50px !important;	
-	margin-top: -10px;
-}
-
-
-div.controls * {
-
+	margin-right: 50px !important;
+	position: relative;
+	top: -8px;
 }
 
 div.controls div.controlDial{
 	margin-left: 50px !important;
-	margin-right: 50px !important;
+	margin-right: 50px !important;	
 	display: inline;
 }
 
