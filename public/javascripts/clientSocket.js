@@ -2,7 +2,8 @@ var timer = null;
 var noteBuffer = [];
 
 var ClientSocket = function(){
-    var socket = io();
+    var socket = io.connect("http://test-imy761.rhcloud.com:8000"); //Use this for openshift
+    //var socket = io.connect("127.0.0.1:8080"); //Use this for localhost
 
     //Inform the server of the size of the grid to be used
     // @param gridSize = size of Note Grid
