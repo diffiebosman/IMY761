@@ -24,8 +24,8 @@ html
 		script(type='text/javascript', src='/javascripts/script.js')
 
 	body
-		block content
-			div#master
+		block content			
+			div#master				
 				div.containerRemote.containerRemote0.centered
 					p.remoteName
 					div#padContainerRemote0
@@ -44,4 +44,6 @@ html
 				div.containerLocal.centered
 					h1= login
 					div#padContainerLocal
-					div#printGridLocal
+					div#printGridLocal		
+					button(id="logout").
+						Logout				

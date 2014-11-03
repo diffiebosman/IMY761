@@ -60,6 +60,9 @@ function start(localClientName, instrument){
 	//Waits for new users to join and adds grids for them without refreshing
 	loginSocket.listenForNewUsers(localClientName);
 
+	//Waits for users to logout and removes their grid without refreshing
+	loginSocket.listenForLogout(localClientName);
+
 	//After all grids have been initialized, start looping through them
 	loginSocket.gridsLoadedResponse(loopThroughGrids, localClientName);
 
@@ -80,6 +83,16 @@ function setUpRemoteGrids(msg){
 	var grids = msg.data;
 	//console.log(grids.length);
 
+	for(var j = grids.length; j < remoteGrid.length; j++){
+		if(remoteGrid[j] !== null){
+			remoteGrid[j].destroy();
+			remoteGrid[j] = null;
+
+			$('.containerRemote' + j).css('max-width', "");
+			$('.containerRemote' + j).css('height', "");
+		}
+	}
+
 	for(var i = 0; i < grids.length; i++){
 
 		var remoteInstrumentName = grids[i].type; //This identifies the instrument selected by each remote user, use this to create an instrument for each user
@@ -96,7 +109,7 @@ function setUpRemoteGrids(msg){
 		instrument.setVolume(50);
 
 		if(remoteGrid[i] === null){
-			remoteGrid[i] = new Grid($('#padContainerRemote' + i), remoteInstrument, BPM, gridSize, clientSocket); // These are sharing an instrument for now...
+			remoteGrid[i] = new Grid($('#padContainerRemote' + i), remoteInstrument, BPM, gridSize, clientSocket);
 
 			$('.containerRemote' + i).css('max-width', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize);
 			$('.containerRemote' + i).css('height', (remoteGridBlock.size + remoteGridBlock.margin) * gridSize + 100);

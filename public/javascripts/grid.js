@@ -145,7 +145,21 @@ var Grid = function(container, instrument, BPM, gridSize, clientSocket){
 				instrument.setVolume(msg.volume);
 			}
 
+		$("#logout").click(function(){
+			if (owner == local_data){
+				clientSocket.logout(owner);
+				window.location.replace("/");
+			}			
+		});
+
 			/*************************************************************/
+		};
+
+		this.destroy = function(){
+			$(container).removeClass(instrument.name);
+			$(container).html("");
+			$(container).parent().find('.remoteName').text("");
+			instrument.setVolume(0);
 		};
 
 	// Toggle buttons on grid (on/off)

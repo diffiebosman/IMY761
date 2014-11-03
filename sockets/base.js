@@ -106,6 +106,27 @@ module.exports = function(io){
       socket.emit('response', msg);
     });
 
+    socket.on('logout', function(name){
+      var index = getIndex(name);
+      var instrument = persistentGrid[index].getType();
+      var instrumentIndex = checkInstrument(instrument);
+      var nameIndex = usedNames.indexOf(name);
+
+      console.log("Logging out: " + name + "'s grid is at index " + index + " and is of type " + instrument);
+
+      persistentGrid.splice(index, 1);
+      usedInstruments.splice(instrumentIndex, 1);
+      usedNames.splice(nameIndex, 1);
+
+      var msg = {
+        type: "userLoggedOut",
+        owner: name
+      };
+
+      socket.broadcast.emit('response', msg);
+
+    });
+
     socket.on('toggleNote', function(x, y, name){
       var index = getIndex(name);
 

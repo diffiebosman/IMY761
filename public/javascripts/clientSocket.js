@@ -2,8 +2,8 @@ var timer = null;
 var noteBuffer = [];
 
 var ClientSocket = function(){
-    var socket = io.connect("http://test-imy761.rhcloud.com:8000"); //Use this for openshift
-    //var socket = io.connect("127.0.0.1:8080"); //Use this for localhost
+    //var socket = io.connect("http://test-imy761.rhcloud.com:8000"); //Use this for openshift
+    var socket = io.connect("127.0.0.1:8080"); //Use this for localhost
 
     //Inform the server of the size of the grid to be used
     // @param gridSize = size of Note Grid
@@ -48,8 +48,20 @@ var ClientSocket = function(){
     this.listenForNewUsers = function(name){
         socket.on('response', function(msg){
             if(msg.type == "newUserJoined" && msg.owner !== name){
-                //setupFunc(msg);
                 console.log(msg.owner + " has joined");
+                socket.emit('getRemoteGrids', name);
+            }
+        });
+    };
+
+    this.logout = function(name){
+        socket.emit('logout', name);
+    };
+
+    this.listenForLogout = function(name){
+        socket.on('response', function(msg){
+            if(msg.type == "userLoggedOut" && msg.owner !== name){
+                console.log(msg.owner + " has logged Out");
                 socket.emit('getRemoteGrids', name);
             }
         });
