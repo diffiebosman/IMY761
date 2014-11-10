@@ -9,7 +9,7 @@
 	var chromatic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 	//Music variables
-	var A = 110; // lowest note
+	var A = 55; // lowest note
 	var BPM = 240;
 
 	//Grid Variables
@@ -25,7 +25,7 @@
 
 	var instrument;
 	//var instrument = new Oscillator(context, bus, A, minorScale);
-	if(local_instrument == 'Oscillator'){
+	if(local_instrument == 'Bass'){
 		instrument = new Oscillator(context, bus, A, minorScale);
 	}
 	else{

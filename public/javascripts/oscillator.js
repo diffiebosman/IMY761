@@ -20,24 +20,30 @@ var Oscillator = function(context, audiobus, baseNote, scale){
 		return baseNote * Math.pow(semitoneRatio, numSemitones);
 	}
 
-	// Creates an oscillator and plays a note through the audio bus
+	// Creates two oscillators and plays two notes an octave apart through the audio bus
 	// @param step = the step of the note in the scale (the how many-th note in the scale to play)
 	this.play = function(step) {
 		var osc = context.createOscillator();
+		var osc2 = context.createOscillator();
+
     	osc.frequency.value = getNote(getNoteFromScale(step));
+    	osc2.frequency.value = getNote(getNoteFromScale(step)) * 2;
     	
     	var g = context.createGain();
 
     	osc.connect(g);
+    	osc2.connect(g);
     	g.connect(audiobus.input);
 
     	//g.gain.value = 0;
 
     	//sets the gain to 0 before ending the note (to get rid of that clicking sound)
 		osc.noteOn(0);
-		setTimeout(function(){g.gain.value = 1;}, 0);
+		osc2.noteOn(0);
+		setTimeout(function(){g.gain.value = 2;}, 0);
 		setTimeout(function(){g.gain.value = 0;}, 200);
 		setTimeout(function(){osc.noteOff(0); osc = null;}, 250);
+		setTimeout(function(){osc2.noteOff(0); osc2 = null;}, 250);
 	}
 
 	// nothing to initialize when using an oscillator

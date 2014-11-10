@@ -21,7 +21,7 @@ var SamplePlayer = function(context, audiobus, baseNote, scale, sampleName){
 
 		var sound = new Howl({
 		  urls: ['/samples/'+sampleName+'/'+note+'.wav'],
-		  volume: this.volume
+		  volume: (this.volume * 0.4)
 		});
 		sound.play();
 	}
