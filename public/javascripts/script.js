@@ -98,7 +98,7 @@ function setUpRemoteGrids(msg){
 		var remoteInstrumentName = grids[i].type; //This identifies the instrument selected by each remote user, use this to create an instrument for each user
 		var remoteInstrument;
 		
-		if(remoteInstrumentName == 'Oscillator'){
+		if(remoteInstrumentName == 'Bass'){
 			remoteInstrument = new Oscillator(context, bus, A, minorScale);
 		}
 		else{
