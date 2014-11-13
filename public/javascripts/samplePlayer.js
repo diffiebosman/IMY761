@@ -20,7 +20,7 @@ var SamplePlayer = function(context, audiobus, baseNote, scale, sampleName){
 		var note = sampleName == 'Drums' ? step + 1 : getNoteFromScale(step);
 
 		var sound = new Howl({
-		  urls: ['/samples/'+sampleName+'/'+note+'.wav'],
+		  urls: ['/samples/'+sampleName+'/'+note+'.mp3'],
 		  volume: (this.volume * 0.4)
 		});
 		sound.play();
@@ -47,7 +47,7 @@ var SamplePlayer = function(context, audiobus, baseNote, scale, sampleName){
 
 		for(var i = 1; i <= l; i++){
 			var sound = new Howl({
-			  urls: ['/samples/'+sampleName+'/'+i+'.wav'],
+			  urls: ['/samples/'+sampleName+'/'+i+'.mp3'],
 			  volume: 0
 			}).play();
 		}
